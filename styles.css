@@ -9,13 +9,12 @@
   --gap: 22px;                 /* 카드 사이 간격 */
   --pad: 26px;                 /* 좌우 여백 (넓힐수록 카드가 작아짐) */
 
-  /* 굵은 제목/버튼용: PC엔 HY견고딕, 모바일엔 Black Han Sans */
-  --font-display: "HY견고딕", "HYGothic-Extra", "Black Han Sans",
-                  "Gothic A1", -apple-system, BlinkMacSystemFont,
-                  "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  /* 본문용 */
-  --font-ko: "Gothic A1", -apple-system, BlinkMacSystemFont,
-             "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+  /* 상단 제목 전용 */
+  --font-title: "IBM Plex Sans KR", "IBM Plex Sans", "Pretendard Variable",
+                Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  /* 그 외 전부 */
+  --font-ko: "Pretendard Variable", Pretendard, -apple-system,
+             BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic",
              system-ui, sans-serif;
 
   --app-max: 560px;            /* 앱 본체 최대 폭 */
@@ -23,6 +22,9 @@
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+/* .grid 같은 display 규칙이 hidden 을 덮어쓰지 않도록 */
+[hidden] { display: none !important; }
 
 html, body {
   margin: 0;
@@ -188,7 +190,7 @@ body {
   padding: 15px 18px;
   border: 0;
   border-top: 1px solid #e3e5ea;
-  font-family: var(--font-display);
+  font-family: var(--font-ko);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -272,9 +274,9 @@ body {
   margin: 0;
   text-align: center;
   line-height: 1.15;
-  font-family: var(--font-display);
+  font-family: var(--font-title);
   font-size: 36px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.5px;
   color: #1a1a1a;
 }
@@ -371,7 +373,7 @@ body {
   z-index: 1;
   padding: 0 8px 14px;
   text-align: center;
-  font-family: var(--font-display);
+  font-family: var(--font-ko);
   font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.5px;
