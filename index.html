@@ -16,6 +16,11 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 <link rel="icon" href="icons/icon-192.png" />
 
+<!-- 모바일에서도 쓰이는 웹폰트 (HY견고딕 대체) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700;900&display=swap" rel="stylesheet" />
+
 <style>
   :root {
     --bg: #ffffff;
@@ -28,10 +33,14 @@
     --pad: 20px;
     --hero-top: 28px;            /* 이미지를 위에서 얼마나 내릴지 */
 
-    --font-ko: "HY견고딕", "HYGothic-Extra", "HYGothic Extra",
-               "HY헤드라인M", "HYHeadLine-Medium",
-               -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-               "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+    /* 굵은 제목/버튼용: PC엔 HY견고딕, 모바일엔 Black Han Sans */
+    --font-display: "HY견고딕", "HYGothic-Extra", "Black Han Sans",
+                    "Gothic A1", -apple-system, BlinkMacSystemFont,
+                    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    /* 본문용 */
+    --font-ko: "Gothic A1", -apple-system, BlinkMacSystemFont,
+               "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+               system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -57,16 +66,20 @@
     background: var(--bg);
   }
 
+  /* 원본 740x555 에서 위 1/7, 아래 1/7 을 잘라낸 비율 */
   .hero-media {
     position: relative;
     width: 100%;
+    aspect-ratio: 740 / 396;
+    overflow: hidden;
     line-height: 0;
   }
 
-  /* 이미지 전체가 잘리지 않고 그대로 보이도록 */
   .hero-media img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
     display: block;
   }
 
@@ -92,7 +105,8 @@
     z-index: 1;
     margin: 0;
     line-height: 1.15;
-    font-size: 26px;
+    font-family: var(--font-display);
+    font-size: 27px;
     font-weight: 800;
     letter-spacing: -0.5px;
     color: #1a1a1a;
@@ -100,9 +114,10 @@
 
   .hero-title span {
     display: block;
-    margin-top: 4px;
-    font-size: 13px;
-    font-weight: 500;
+    margin-top: 5px;
+    font-family: var(--font-ko);
+    font-size: 12px;
+    font-weight: 700;
     letter-spacing: 0.4px;
     color: var(--sub);
   }
@@ -126,7 +141,8 @@
     background: var(--bg);
     border: var(--card-border-width) solid var(--card-border);
     border-radius: var(--card-radius);
-    font-size: 15px;
+    font-family: var(--font-display);
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: -0.5px;
     color: var(--text);
