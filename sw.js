@@ -5,13 +5,17 @@
  * 내용을 크게 바꿨을 땐 CACHE 버전을 올린다.
  */
 
-const CACHE = "tokyo-guide-v5";
+const CACHE = "tokyo-guide-v6";
 
 const PRECACHE = [
   "./",
   "index.html",
+  "shibuya.html",
+  "akihabara.html",
   "styles.css",
   "app.js",
+  "common.js",
+  "area.js",
   "manifest.webmanifest",
   "images/tokyo.png",
   "images/shibuya.png",

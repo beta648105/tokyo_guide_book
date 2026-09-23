@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
-<title>도쿄 가이드북</title>
-<meta name="description" content="도쿄 여행 가이드북" />
+<title>아키하바라 · 도쿄 가이드북</title>
+<meta name="description" content="도쿄 아키하바라 가이드" />
 
-<!-- PWA / 홈 화면 추가 -->
 <meta name="theme-color" content="#e8eaee" />
 <link rel="manifest" href="manifest.webmanifest" />
 <meta name="mobile-web-app-capable" content="yes" />
@@ -16,7 +15,6 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 <link rel="icon" href="icons/icon-192.png" />
 
-<!-- 모바일에서도 쓰이는 웹폰트 (HY견고딕 대체) -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;700;900&display=swap" rel="stylesheet" />
@@ -27,7 +25,7 @@
 
 <div class="app">
 
-  <!-- 왼쪽 위 홈 버튼: 어느 페이지에서든 홈 화면으로 -->
+  <!-- 왼쪽 위 홈 버튼: 누르면 홈 화면으로 -->
   <a class="home-btn" href="./" aria-label="홈으로">
     <svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M3 10.6 12 3.5l9 7.1" />
@@ -38,12 +36,14 @@
 
   <header class="hero">
     <div class="hero-media rise">
-      <img src="images/tokyo.png" alt="도쿄" />
+      <img src="images/akihabara.png" alt="아키하바라" />
     </div>
-    <h1 class="hero-title rise" style="--delay: 0.12s">도쿄 가이드북<span>TOKYO GUIDE BOOK</span></h1>
+    <h1 class="hero-title rise" style="--delay: 0.12s">아키하바라<span>AKIHABARA</span></h1>
   </header>
 
-  <main class="grid" id="grid"></main>
+  <main class="page-body rise" style="--delay: 0.22s">
+    <p class="placeholder">내용 준비중</p>
+  </main>
 
   <noscript>
     <p class="noscript">이 앱을 보려면 자바스크립트를 켜 주세요.</p>
@@ -52,6 +52,6 @@
 </div>
 
 <script src="common.js"></script>
-<script src="app.js"></script>
+<script src="area.js"></script>
 </body>
 </html>
