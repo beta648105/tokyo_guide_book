@@ -5,7 +5,7 @@
  * 내용을 크게 바꿨을 땐 CACHE 버전을 올린다.
  */
 
-const CACHE = "tokyo-guide-v12";
+const CACHE = "tokyo-guide-v13";
 
 const PRECACHE = [
   "./",
@@ -22,6 +22,7 @@ const PRECACHE = [
   "images/akihabara.png",
   "icons/icon-192.png",
   "icons/icon-512.png",
+  "icons/icon-maskable-512.png",
   "icons/apple-touch-icon.png",
 ];
 
