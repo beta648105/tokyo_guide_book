@@ -1,11 +1,12 @@
 :root {
-  --bg: #f0f1f4;               /* 앱 배경 (연한 회색) */
-  --bg-rgb: 240, 241, 244;     /* 그라데이션용 */
-  --outside: #e4e6ea;          /* 앱 바깥쪽 (PC 에서만 보임) */
-  --side-border: #d3d7de;      /* 양 옆 세로 테두리 */
+  --bg: #e8eaee;               /* 앱 배경 (연한 회색) */
+  --bg-rgb: 232, 234, 238;     /* 그라데이션용 */
+  --outside: #d5d8de;          /* 앱 바깥쪽 (PC 에서만 보임) */
+  --side-border: #909399;      /* 양 옆 세로 테두리 (일반 회색) */
+  --topbar: #000000;           /* 이미지 위쪽 띠 */
   --text: #1a1a1a;
   --sub: #8a8f98;
-  --card-border: #e2e5ea;
+  --card-border: #d7dbe1;
   --card-border-width: 30px;   /* 테두리 두께 */
   --card-radius: 40px;
   --gap: 14px;
@@ -47,8 +48,8 @@ body {
   min-height: 100dvh;
   margin: 0 auto;
   background: var(--bg);
-  border-left: 1px solid var(--side-border);
-  border-right: 1px solid var(--side-border);
+  border-left: 1.5px solid var(--side-border);
+  border-right: 1.5px solid var(--side-border);
 }
 
 /* ── 왼쪽 위 홈 버튼 ── */
@@ -63,7 +64,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(8px);
@@ -106,7 +107,7 @@ body {
 .hero {
   position: relative;
   padding-top: calc(env(safe-area-inset-top) + var(--hero-top));
-  background: var(--bg);
+  background: var(--topbar);   /* 이미지 위 여백 = 검은 띠 */
   overflow: hidden;
 }
 
@@ -217,7 +218,7 @@ body {
   height: 100%;
   border-radius: calc(var(--card-radius) - var(--card-border-width));
   overflow: hidden;
-  background: #f3f4f6;
+  background: #dde0e6;
   display: flex;
   align-items: flex-end;
   justify-content: center;

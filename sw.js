@@ -5,7 +5,7 @@
  * 내용을 크게 바꿨을 땐 CACHE 버전을 올린다.
  */
 
-const CACHE = "tokyo-guide-v3";
+const CACHE = "tokyo-guide-v4";
 
 const PRECACHE = [
   "./",
