@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<title>도쿄 가이드북</title>
+<meta name="description" content="도쿄 여행 가이드북" />
+
+<!-- PWA / 홈 화면 추가 -->
+<meta name="theme-color" content="#ffffff" />
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="도쿄 가이드북" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="icon" href="icons/icon-192.png" />
+
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --sub: #8a8f98;
+    --card-border: #e5e7eb;
+    --card-bg: #ffffff;
+    --gap: 14px;
+    --pad: 20px;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+                 "Pretendard", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
+  }
+
+  /* ── 상단 히어로 이미지 ── */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 46dvh;
+    min-height: 260px;
+    max-height: 420px;
+    overflow: hidden;
+  }
+
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    display: block;
+  }
+
+  /* 아래쪽이 흰색으로 자연스럽게 녹아드는 그라데이션 */
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 45%,
+      rgba(255, 255, 255, 0.35) 68%,
+      rgba(255, 255, 255, 0.8) 86%,
+      #ffffff 100%
+    );
+    pointer-events: none;
+  }
+
+  .hero-title {
+    position: absolute;
+    left: var(--pad);
+    bottom: 34px;
+    margin: 0;
+    z-index: 1;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #1a1a1a;
+  }
+
+  .hero-title span {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    color: var(--sub);
+  }
+
+  /* ── 2x2 지역 선택 ── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+    padding: 4px var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .card {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--text);
+    user-select: none;
+  }
+
+  .card.soon {
+    color: #c3c7cd;
+    font-weight: 500;
+  }
+
+  @media (min-width: 640px) {
+    .hero { max-height: 46dvh; }
+    .card { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <img src="images/tokyo.png" alt="도쿄" />
+    <h1 class="hero-title">도쿄 가이드북<span>TOKYO GUIDE BOOK</span></h1>
+  </header>
+
+  <main class="grid">
+    <div class="card">시부야</div>
+    <div class="card">아키하바라</div>
+    <div class="card soon">준비중</div>
+    <div class="card soon">준비중</div>
+  </main>
+
+</body>
+</html>
