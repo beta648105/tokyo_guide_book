@@ -68,3 +68,81 @@ function initPageTransitions() {
     setTimeout(() => { location.href = url.href; }, EXIT_MS);
   });
 }
+
+/* ── 오른쪽 상단 메뉴 ──
+   가로선 3개 버튼을 누르면 오른쪽에서 패널이 절반 폭만큼 밀려 나온다.
+   항목은 아직 누르는 동작이 없다. */
+
+const MENU_ITEMS = [
+  { label: "일정표", ready: false },
+];
+
+function buildMenuButton() {
+  const btn = document.createElement("button");
+  btn.className = "menu-btn";
+  btn.type = "button";
+  btn.setAttribute("aria-label", "메뉴 열기");
+  btn.setAttribute("aria-expanded", "false");
+  btn.innerHTML =
+    '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path d="M4 7h16" /><path d="M4 12h16" /><path d="M4 17h16" /></svg>';
+  return btn;
+}
+
+function buildDrawer() {
+  const drawer = document.createElement("aside");
+  drawer.className = "drawer";
+  drawer.setAttribute("aria-hidden", "true");
+
+  const title = document.createElement("p");
+  title.className = "drawer-title";
+  title.textContent = "설정";
+  drawer.append(title);
+
+  const list = document.createElement("div");
+  list.className = "drawer-list";
+  for (const item of MENU_ITEMS) {
+    const row = document.createElement("div");
+    row.className = "drawer-item";
+    row.textContent = item.label;
+    list.append(row);
+  }
+  drawer.append(list);
+  return drawer;
+}
+
+function initMenu() {
+  const app = document.querySelector(".app");
+  if (!app) return;
+
+  const btn = buildMenuButton();
+  const scrim = document.createElement("div");
+  scrim.className = "scrim";
+  const drawer = buildDrawer();
+  app.append(btn, scrim, drawer);
+
+  // PC 에서 스크롤바 폭까지 고려해 앱 본체 오른쪽 끝에 정확히 붙인다
+  const syncPosition = () => {
+    const rect = app.getBoundingClientRect();
+    const viewport = document.documentElement.clientWidth;
+    drawer.style.right = `${Math.max(0, viewport - rect.right)}px`;
+    drawer.style.width = `${rect.width / 2}px`;
+  };
+  syncPosition();
+  window.addEventListener("resize", syncPosition);
+
+  const setOpen = (open) => {
+    btn.classList.toggle("open", open);
+    scrim.classList.toggle("open", open);
+    drawer.classList.toggle("open", open);
+    btn.setAttribute("aria-expanded", String(open));
+    btn.setAttribute("aria-label", open ? "메뉴 닫기" : "메뉴 열기");
+    drawer.setAttribute("aria-hidden", String(!open));
+  };
+
+  btn.addEventListener("click", () => setOpen(!drawer.classList.contains("open")));
+  scrim.addEventListener("click", () => setOpen(false));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+}

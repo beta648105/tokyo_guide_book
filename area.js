@@ -5,3 +5,4 @@
 
 registerServiceWorker();
 initPageTransitions();
+initMenu();

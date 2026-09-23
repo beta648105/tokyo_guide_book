@@ -54,3 +54,4 @@ function renderGrid() {
 renderGrid();
 registerServiceWorker();
 initPageTransitions();
+initMenu();
