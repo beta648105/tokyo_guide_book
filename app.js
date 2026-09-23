@@ -46,47 +46,13 @@ function createCard(area, index) {
 
 /** 2x2 그리드를 그린다. */
 function renderGrid() {
-  const grid = document.getElementById("view-areas");
+  const grid = document.getElementById("view-main");
   if (!grid) return;
   grid.replaceChildren(...AREAS.map(createCard));
 }
 
-/* ── 아래 섹션 전환 ──
-   상단 이미지는 그대로 두고 그 아래만 바꾼다. 페이드 없이 즉시. */
-
-const VIEWS = ["areas", "schedule"];
-
-function showView(view) {
-  if (!VIEWS.includes(view)) view = "areas";
-  for (const name of VIEWS) {
-    const section = document.getElementById(`view-${name}`);
-    if (section) section.hidden = name !== view;
-  }
-  // 상단 제목도 같이 교체 (이미지는 그대로)
-  const mainTitle = document.querySelector(".hero-title:not(.hero-title-alt)");
-  const altTitle = document.querySelector(".hero-title-alt");
-  if (mainTitle) mainTitle.hidden = view !== "areas";
-  if (altTitle) altTitle.hidden = view === "areas";
-
-  document.body.dataset.view = view;
-  history.replaceState(null, "", view === "areas" ? "./" : `#${view}`);
-}
-
-/** 홈 버튼: 다른 섹션을 보고 있으면 새로고침 없이 지역 목록으로 되돌린다. */
-function initHomeButton() {
-  const btn = document.querySelector(".home-btn");
-  if (!btn) return;
-  btn.addEventListener("click", (event) => {
-    if ((document.body.dataset.view || "areas") === "areas") return; // 이미 홈
-    event.preventDefault();
-    event.stopPropagation();
-    showView("areas");
-  }, true);
-}
-
 renderGrid();
-showView(location.hash.replace("#", "") || "areas");
-initHomeButton();
+initViews();
 registerServiceWorker();
 initPageTransitions();
 initMenu();

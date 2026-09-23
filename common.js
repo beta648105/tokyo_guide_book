@@ -77,17 +77,54 @@ const MENU_ITEMS = [
   { label: "일정표", view: "schedule" },
 ];
 
-/**
- * 메뉴 항목을 골랐을 때.
- * 홈 화면이면 상단 이미지는 그대로 두고 아래 섹션만 바로 바꾸고,
- * 지역 페이지면 홈으로 이동하면서 해당 섹션을 연다.
- */
-function openMenuItem(item) {
-  if (typeof showView === "function") {
-    showView(item.view);          // 홈 화면: 페이드 없이 즉시 전환
-  } else {
-    location.href = `index.html#${item.view}`;
+/* ── 섹션 전환 ──
+   어느 페이지에서든 상단 사진은 그대로 두고 그 아래만 바꾼다.
+   시부야에서 열면 시부야 사진이, 홈에서 열면 도쿄 사진이 그대로 남는다. */
+
+const VIEWS = ["main", "schedule"];
+
+function showView(view) {
+  if (!VIEWS.includes(view)) view = "main";
+
+  for (const name of VIEWS) {
+    const section = document.getElementById(`view-${name}`);
+    if (section) section.hidden = name !== view;
   }
+
+  // 상단 제목도 같이 교체 (사진은 건드리지 않는다)
+  const mainTitle = document.querySelector(".hero-title:not(.hero-title-alt)");
+  const altTitle = document.querySelector(".hero-title-alt");
+  if (mainTitle) mainTitle.hidden = view !== "main";
+  if (altTitle) altTitle.hidden = view === "main";
+
+  document.body.dataset.view = view;
+  const url = view === "main" ? location.pathname : `#${view}`;
+  history.replaceState(null, "", url);
+}
+
+/** 메뉴 항목을 골랐을 때: 지금 페이지 안에서 바로 전환 */
+function openMenuItem(item) {
+  showView(item.view);
+}
+
+/** 홈 버튼: 홈 화면에서 다른 섹션을 보고 있으면 새로고침 없이 되돌린다. */
+function initHomeButton() {
+  const btn = document.querySelector(".home-btn");
+  if (!btn) return;
+  btn.addEventListener("click", (event) => {
+    const onHome = document.body.dataset.page === "home";
+    const inMain = (document.body.dataset.view || "main") === "main";
+    if (!onHome || inMain) return;   // 지역 페이지거나 이미 홈이면 평소대로 이동
+    event.preventDefault();
+    event.stopPropagation();
+    showView("main");
+  }, true);
+}
+
+/** 주소에 #schedule 이 붙어 있으면 그 섹션으로 시작한다. */
+function initViews() {
+  showView(location.hash.replace("#", "") || "main");
+  initHomeButton();
 }
 
 function buildMenuButton() {
@@ -134,7 +171,11 @@ function initMenu() {
   const scrim = document.createElement("div");
   scrim.className = "scrim";
   const drawer = buildDrawer();
-  app.append(btn, scrim, drawer);
+  app.append(btn);
+  // 패널과 배경은 body 에 붙인다. .app 은 페이지 전환 때 transform 이 걸리는데
+  // transform 이 걸린 조상 안에서는 position: fixed 가 그 조상 기준으로 바뀌어
+  // 패널이 잠깐 화면 안으로 튀어 들어온다.
+  document.body.append(scrim, drawer);
 
   // PC 에서 스크롤바 폭까지 고려해 앱 본체 오른쪽 끝에 정확히 붙인다
   const syncPosition = () => {

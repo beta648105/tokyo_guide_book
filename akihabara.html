@@ -24,7 +24,7 @@
 
 <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-page="area">
 
 <div class="app">
 
@@ -42,10 +42,20 @@
       <img src="images/akihabara.png" alt="아키하바라" />
     </div>
     <h1 class="hero-title rise" style="--delay: 0.12s">아키하바라<span>AKIHABARA</span></h1>
+    <!-- 일정표를 볼 때 같은 자리에 대신 들어가는 제목 -->
+    <h2 class="hero-title hero-title-alt" hidden>일정표</h2>
   </header>
 
-  <main class="page-body rise" style="--delay: 0.22s">
-    <p class="placeholder">내용 준비중</p>
+  <main>
+    <!-- 지역 내용 -->
+    <section id="view-main" class="page-body rise" style="--delay: 0.22s">
+      <p class="placeholder">내용 준비중</p>
+    </section>
+
+    <!-- 일정표 (메뉴에서 전환, 위 사진은 그대로) -->
+    <section id="view-schedule" class="view-schedule" hidden>
+      <!-- 여기에 일정표(표)가 들어감 -->
+    </section>
   </main>
 
   <noscript>
