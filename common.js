@@ -34,9 +34,14 @@ function registerServiceWorker() {
   });
 }
 
-/* ── 페이지 전환 효과 ──
+/* ── 페이지 전환 ──
    떠나는 페이지는 아래로 페이드아웃, 새 페이지는 아래에서 위로 올라오며 페이드인.
-   (올라오는 쪽은 각 요소의 .rise 애니메이션이 맡는다) */
+   (올라오는 쪽은 각 요소의 .rise 애니메이션이 맡는다)
+
+   이동은 location.replace 로 한다. 방문 기록을 새로 쌓지 않아서
+   아이폰의 '왼쪽에서 오른쪽으로 스와이프해 뒤로가기' 가 돌아갈 곳을 못 찾는다.
+   (그 제스처는 WebKit 이 처리해서 JS 로는 막을 수 없다.
+    기록을 안 만드는 것이 앱처럼 버튼으로만 움직이게 하는 유일한 방법) */
 
 const EXIT_MS = 300; // 페이드아웃에 쓰는 시간. styles.css 의 .app.leaving 과 맞출 것
 
@@ -61,11 +66,17 @@ function initPageTransitions() {
     const url = new URL(link.getAttribute("href"), location.href);
     if (url.origin !== location.origin) return;       // 바깥 사이트는 그대로
     if (url.href === location.href) return;           // 같은 페이지면 굳이
-    if (prefersReducedMotion()) return;               // 움직임 줄이기 설정 존중
 
     event.preventDefault();
+
+    // 움직임 줄이기 설정이면 효과 없이 바로 이동
+    if (prefersReducedMotion()) {
+      location.replace(url.href);
+      return;
+    }
+
     app.classList.add("leaving");
-    setTimeout(() => { location.href = url.href; }, EXIT_MS);
+    setTimeout(() => { location.replace(url.href); }, EXIT_MS);
   });
 }
 

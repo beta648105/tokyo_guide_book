@@ -37,7 +37,9 @@ html, body {
 
 body {
   min-height: 100dvh;
-  overscroll-behavior-y: none;
+  /* 위아래 고무줄 효과와 가로 스와이프 반응을 끈다 */
+  overscroll-behavior: none;
+  overflow-x: hidden;
 }
 
 /* 앱 본체: 가운데 정렬 + 양 옆 세로 테두리 */
