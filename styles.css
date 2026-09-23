@@ -186,12 +186,16 @@ body {
   align-items: center;
   width: 100%;
   padding: 15px 18px;
+  border: 0;
   border-top: 1px solid #e3e5ea;
   font-family: var(--font-display);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.3px;
   color: var(--text);
+  background: none;
+  text-align: left;
+  cursor: pointer;
   user-select: none;
 }
 
@@ -400,6 +404,22 @@ body {
   .card, .card-img, .home-btn { transition: none; }
   .app.leaving { animation: none; }
   .drawer, .scrim { transition: none; }
+}
+
+/* ── 일정표 섹션 ── */
+.view-schedule {
+  padding: 4px var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));
+}
+
+.view-title {
+  margin: 0;
+  padding: 10px 0 8px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
 }
 
 /* ── 지역 페이지 본문 ── */

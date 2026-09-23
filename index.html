@@ -43,7 +43,15 @@
     <h1 class="hero-title rise" style="--delay: 0.12s">도쿄 가이드북<span>TOKYO GUIDE BOOK</span></h1>
   </header>
 
-  <main class="grid" id="grid"></main>
+  <main>
+    <!-- 지역 선택 -->
+    <section class="grid" id="view-areas" aria-label="지역 선택"></section>
+
+    <!-- 일정표 (메뉴에서 전환) -->
+    <section id="view-schedule" class="view-schedule" hidden>
+      <h2 class="view-title">일정표</h2>
+    </section>
+  </main>
 
   <noscript>
     <p class="noscript">이 앱을 보려면 자바스크립트를 켜 주세요.</p>

@@ -74,8 +74,21 @@ function initPageTransitions() {
    항목은 아직 누르는 동작이 없다. */
 
 const MENU_ITEMS = [
-  { label: "일정표", ready: false },
+  { label: "일정표", view: "schedule" },
 ];
+
+/**
+ * 메뉴 항목을 골랐을 때.
+ * 홈 화면이면 상단 이미지는 그대로 두고 아래 섹션만 바로 바꾸고,
+ * 지역 페이지면 홈으로 이동하면서 해당 섹션을 연다.
+ */
+function openMenuItem(item) {
+  if (typeof showView === "function") {
+    showView(item.view);          // 홈 화면: 페이드 없이 즉시 전환
+  } else {
+    location.href = `index.html#${item.view}`;
+  }
+}
 
 function buildMenuButton() {
   const btn = document.createElement("button");
@@ -102,9 +115,11 @@ function buildDrawer() {
   const list = document.createElement("div");
   list.className = "drawer-list";
   for (const item of MENU_ITEMS) {
-    const row = document.createElement("div");
+    const row = document.createElement("button");
+    row.type = "button";
     row.className = "drawer-item";
     row.textContent = item.label;
+    row.dataset.view = item.view;
     list.append(row);
   }
   drawer.append(list);
@@ -141,6 +156,15 @@ function initMenu() {
   };
 
   btn.addEventListener("click", () => setOpen(!drawer.classList.contains("open")));
+
+  drawer.addEventListener("click", (event) => {
+    const row = event.target.closest(".drawer-item");
+    if (!row) return;
+    const item = MENU_ITEMS.find((i) => i.view === row.dataset.view);
+    if (!item) return;
+    setOpen(false);
+    openMenuItem(item);
+  });
   scrim.addEventListener("click", () => setOpen(false));
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") setOpen(false);
