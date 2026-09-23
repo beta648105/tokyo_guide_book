@@ -7,7 +7,7 @@
 <meta name="description" content="도쿄 여행 가이드북" />
 
 <!-- PWA / 홈 화면 추가 -->
-<meta name="theme-color" content="#ffffff" />
+<meta name="theme-color" content="#f0f1f4" />
 <link rel="manifest" href="manifest.webmanifest" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -25,6 +25,17 @@
 </head>
 <body>
 
+<div class="app">
+
+  <!-- 왼쪽 위 홈 버튼: 어느 페이지에서든 홈 화면으로 -->
+  <a class="home-btn" href="./" aria-label="홈으로">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 10.6 12 3.5l9 7.1" />
+      <path d="M5.6 9.6V20h12.8V9.6" />
+      <path d="M9.8 20v-5.6h4.4V20" />
+    </svg>
+  </a>
+
   <header class="hero">
     <div class="hero-media rise">
       <img src="images/tokyo.png" alt="도쿄" />
@@ -38,6 +49,8 @@
     <p class="noscript">이 앱을 보려면 자바스크립트를 켜 주세요.</p>
   </noscript>
 
-  <script src="app.js"></script>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
