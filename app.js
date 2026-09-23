@@ -62,6 +62,12 @@ function showView(view) {
     const section = document.getElementById(`view-${name}`);
     if (section) section.hidden = name !== view;
   }
+  // 상단 제목도 같이 교체 (이미지는 그대로)
+  const mainTitle = document.querySelector(".hero-title:not(.hero-title-alt)");
+  const altTitle = document.querySelector(".hero-title-alt");
+  if (mainTitle) mainTitle.hidden = view !== "areas";
+  if (altTitle) altTitle.hidden = view === "areas";
+
   document.body.dataset.view = view;
   history.replaceState(null, "", view === "areas" ? "./" : `#${view}`);
 }

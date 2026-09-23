@@ -406,20 +406,21 @@ body {
   .drawer, .scrim { transition: none; }
 }
 
-/* ── 일정표 섹션 ── */
-.view-schedule {
-  padding: 4px var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));
+/* ── 일정표 화면 ──
+   상단 이미지만 남기고, 제목 자리에 '일정표' 를 넣는다. */
+body[data-view="schedule"] .menu-btn { display: none; }
+
+.hero-title-alt {
+  font-size: 30px;
+  bottom: 10px;
 }
 
-.view-title {
-  margin: 0;
-  padding: 10px 0 8px;
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  color: var(--text);
+.hero-title[hidden] { display: none; }
+
+/* ── 일정표 섹션 ── */
+.view-schedule {
+  padding: 14px var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));
+  min-height: 120px;
 }
 
 /* ── 지역 페이지 본문 ── */
