@@ -10,13 +10,41 @@ const AREAS = [
   { id: null,        name: "준비중",     image: null,                   ready: false },
 ];
 
+/** 카드가 아래에서 올라오기 시작하는 시간 */
+const RISE_START = 0.25;  // 초
+const RISE_STEP = 0.09;   // 카드 하나당 간격
+
 /** 카드 하나를 만든다. 아직 누르는 동작은 없다. */
-function createCard(area) {
+function createCard(area, index) {
+  const wrap = document.createElement("div");
+  wrap.className = "card-wrap rise";
+  wrap.style.setProperty("--delay", `${RISE_START + index * RISE_STEP}s`);
+
   const card = document.createElement("div");
   card.className = area.ready ? "card" : "card soon";
-  card.textContent = area.name;
   if (area.id) card.dataset.area = area.id;
-  return card;
+
+  const inner = document.createElement("div");
+  inner.className = "card-inner";
+
+  if (area.image) {
+    const img = document.createElement("img");
+    img.className = "card-img";
+    img.src = area.image;
+    img.alt = area.name;
+    img.loading = "lazy";
+    img.decoding = "async";
+    inner.append(img);
+  }
+
+  const label = document.createElement("span");
+  label.className = "card-label";
+  label.textContent = area.name;
+  inner.append(label);
+
+  card.append(inner);
+  wrap.append(card);
+  return wrap;
 }
 
 /** 2x2 그리드를 그린다. */
