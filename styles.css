@@ -3,15 +3,11 @@
   --bg-rgb: 232, 234, 238;     /* 그라데이션용 */
   --outside: #d5d8de;          /* 앱 바깥쪽 (PC 에서만 보임) */
   --side-border: #909399;      /* 양 옆 세로 테두리 (일반 회색) */
-  --topbar: #000000;           /* 이미지 위쪽 띠 */
   --text: #1a1a1a;
   --sub: #8a8f98;
-  --card-border: #d7dbe1;
-  --card-border-width: 30px;   /* 테두리 두께 */
-  --card-radius: 40px;
-  --gap: 14px;
-  --pad: 20px;
-  --hero-top: 28px;            /* 이미지를 위에서 얼마나 내릴지 */
+  --card-radius: 26px;
+  --gap: 22px;                 /* 카드 사이 간격 */
+  --pad: 26px;                 /* 좌우 여백 (넓힐수록 카드가 작아짐) */
 
   /* 굵은 제목/버튼용: PC엔 HY견고딕, 모바일엔 Black Han Sans */
   --font-display: "HY견고딕", "HYGothic-Extra", "Black Han Sans",
@@ -56,7 +52,7 @@ body {
 .home-btn {
   position: absolute;
   z-index: 3;
-  top: calc(env(safe-area-inset-top) + var(--hero-top) + 12px);
+  top: calc(env(safe-area-inset-top) + 12px);
   left: 16px;
   width: 40px;
   height: 40px;
@@ -106,8 +102,7 @@ body {
 /* ── 상단 히어로 이미지 ── */
 .hero {
   position: relative;
-  padding-top: calc(env(safe-area-inset-top) + var(--hero-top));
-  background: var(--topbar);   /* 이미지 위 여백 = 검은 띠 */
+  background: var(--bg);
   overflow: hidden;
 }
 
@@ -186,13 +181,11 @@ body {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  background: var(--card-border);
-  border: var(--card-border-width) solid var(--card-border);
+  background: transparent;
   border-radius: var(--card-radius);
   overflow: hidden;
   user-select: none;
   transition: transform 0.35s var(--ease-out),
-              border-color 0.35s var(--ease-out),
               box-shadow 0.35s var(--ease-out);
 }
 
@@ -200,8 +193,7 @@ body {
 @media (hover: hover) {
   .card:hover {
     transform: scale(1.04);
-    border-color: #d3d7dd;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.09);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
   }
   .card:hover .card-img { transform: scale(1.08); }
 }
@@ -216,7 +208,7 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: calc(var(--card-radius) - var(--card-border-width));
+  border-radius: var(--card-radius);
   overflow: hidden;
   background: #dde0e6;
   display: flex;
@@ -250,10 +242,10 @@ body {
 .card-label {
   position: relative;
   z-index: 1;
-  padding: 0 6px 10px;
+  padding: 0 8px 14px;
   text-align: center;
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.5px;
   color: #ffffff;
