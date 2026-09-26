@@ -80,6 +80,26 @@ function initPageTransitions() {
   });
 }
 
+/* ── 세로 화면 고정 ──
+   매니페스트의 orientation 은 안드로이드에서만 듣고 아이폰은 무시한다.
+   잠글 수 있는 기기에서는 잠그고, 안 되는 기기에서는 안내 화면을 덮는다. */
+
+function initPortraitLock() {
+  // 안드로이드 설치형에서만 실제로 잠긴다. 실패해도 무시.
+  if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock("portrait").catch(() => {});
+  }
+
+  const notice = document.createElement("div");
+  notice.className = "rotate-notice";
+  notice.innerHTML =
+    '<svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true">' +
+    '<rect x="7" y="2.5" width="10" height="19" rx="2.2" />' +
+    '<path d="M12 18.4h.01" />' +
+    '</svg><p>세로 화면으로 돌려주세요</p>';
+  document.body.append(notice);
+}
+
 /* ── 오른쪽 상단 메뉴 ──
    가로선 3개 버튼을 누르면 오른쪽에서 패널이 절반 폭만큼 밀려 나온다.
    항목은 아직 누르는 동작이 없다. */
@@ -193,7 +213,7 @@ function initMenu() {
     const rect = app.getBoundingClientRect();
     const viewport = document.documentElement.clientWidth;
     drawer.style.right = `${Math.max(0, viewport - rect.right)}px`;
-    drawer.style.width = `${rect.width / 2}px`;
+    drawer.style.width = `${Math.min(rect.width / 2, 360)}px`;
   };
   syncPosition();
   window.addEventListener("resize", syncPosition);

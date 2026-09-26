@@ -17,7 +17,6 @@
              BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic",
              system-ui, sans-serif;
 
-  --app-max: 560px;            /* 앱 본체 최대 폭 */
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -45,7 +44,7 @@ body {
 /* 앱 본체: 가운데 정렬 + 양 옆 세로 테두리 */
 .app {
   position: relative;
-  max-width: var(--app-max);
+  width: 100%;
   min-height: 100dvh;
   margin: 0 auto;
   background: var(--bg);
@@ -154,9 +153,8 @@ body {
   z-index: 20;
   top: 0;
   bottom: 0;
-  /* PC 에서도 앱 본체의 오른쪽 끝에 붙도록 */
-  right: max(0px, calc((100vw - var(--app-max)) / 2));
-  width: min(50vw, calc(var(--app-max) / 2));
+  right: 0;                      /* 실제 위치는 common.js 가 다시 맞춘다 */
+  width: min(50vw, 360px);
   padding: calc(env(safe-area-inset-top) + 64px) 0 0;
   background: #f4f5f7;
   border-left: 1px solid var(--side-border);
@@ -241,6 +239,21 @@ body {
   aspect-ratio: 740 / 396;
   overflow: hidden;
   line-height: 0;
+}
+
+/* 넓은 화면(PC): 폭을 꽉 채우되 사진 높이는 화면의 절반 정도로 */
+@media (min-width: 700px) {
+  .hero-media {
+    aspect-ratio: auto;
+    height: 52dvh;
+  }
+
+  .hero-title { font-size: 44px; }
+  .hero-title-alt { font-size: 38px; }
+
+  /* 카드가 정사각형이면 너무 거대해지므로 가로로 눕힌다 */
+  .card { aspect-ratio: 16 / 10; }
+  .card-label { font-size: 22px; }
 }
 
 .hero-media img {
@@ -440,6 +453,41 @@ body[data-view="schedule"] .menu-btn { display: none; }
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.3px;
+}
+
+/* ── 가로로 돌렸을 때 안내 (폰·태블릿만) ── */
+.rotate-notice {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.rotate-notice svg {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rotate-notice p {
+  margin: 0;
+  font-family: var(--font-ko);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* 손가락으로 쓰는 기기가 가로로 누웠을 때만 (PC 는 제외) */
+@media (orientation: landscape) and (pointer: coarse) and (max-height: 600px) {
+  .rotate-notice { display: flex; }
 }
 
 /* JS 가 꺼져 있을 때 */
