@@ -1,7 +1,6 @@
 :root {
   --bg: #e8eaee;               /* 앱 배경 (연한 회색) */
   --bg-rgb: 232, 234, 238;     /* 그라데이션용 */
-  --outside: #d5d8de;          /* 앱 바깥쪽 (PC 에서만 보임) */
   --side-border: #909399;      /* 양 옆 세로 테두리 (일반 회색) */
   --text: #1a1a1a;
   --sub: #8a8f98;
@@ -25,10 +24,15 @@
 /* .grid 같은 display 규칙이 hidden 을 덮어쓰지 않도록 */
 [hidden] { display: none !important; }
 
+html {
+  /* 페이지마다 스크롤바가 생겼다 없어지며 폭이 18px 씩 튀는 것 방지 */
+  scrollbar-gutter: stable;
+}
+
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--outside);
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-ko);
   -webkit-text-size-adjust: 100%;
@@ -455,39 +459,33 @@ body[data-view="schedule"] .menu-btn { display: none; }
   letter-spacing: -0.3px;
 }
 
-/* ── 가로로 돌렸을 때 안내 (폰·태블릿만) ── */
-.rotate-notice {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  background: var(--bg);
-  text-align: center;
-}
-
-.rotate-notice svg {
-  fill: none;
-  stroke: var(--text);
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.rotate-notice p {
-  margin: 0;
-  font-family: var(--font-ko);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-/* 손가락으로 쓰는 기기가 가로로 누웠을 때만 (PC 는 제외) */
+/* ── 세로 고정 ──
+   폰이 가로로 누우면 화면이 돌아간 만큼 내용을 반대로 돌려
+   세로 화면 그대로인 것처럼 보이게 한다. PC 는 해당 없음. */
 @media (orientation: landscape) and (pointer: coarse) and (max-height: 600px) {
-  .rotate-notice { display: flex; }
+  html {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: 100vw;
+    width: 100dvh;
+    height: 100dvw;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transform-origin: top left;
+  }
+
+  body[data-rotate="cw"]  { transform: translateX(100vw) rotate(90deg); }
+  body[data-rotate="ccw"] { transform: translateY(100vh) rotate(-90deg); }
+
+  /* 돌아간 상자를 기준으로 높이를 잡는다 */
+  .app { min-height: 100%; }
 }
 
 /* JS 가 꺼져 있을 때 */

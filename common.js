@@ -81,23 +81,32 @@ function initPageTransitions() {
 }
 
 /* ── 세로 화면 고정 ──
-   매니페스트의 orientation 은 안드로이드에서만 듣고 아이폰은 무시한다.
-   잠글 수 있는 기기에서는 잠그고, 안 되는 기기에서는 안내 화면을 덮는다. */
+   아이폰 사파리에는 화면 잠금 API 가 없어서 진짜로 잠글 수는 없다.
+   그래서 기기가 가로로 누우면 화면이 돌아간 만큼 내용을 반대로 되돌려,
+   세로로 고정된 앱처럼 보이게 한다.
+   (안드로이드 설치형 앱은 아래 lock 으로 실제로 잠긴다) */
 
 function initPortraitLock() {
-  // 안드로이드 설치형에서만 실제로 잠긴다. 실패해도 무시.
   if (screen.orientation && screen.orientation.lock) {
     screen.orientation.lock("portrait").catch(() => {});
   }
 
-  const notice = document.createElement("div");
-  notice.className = "rotate-notice";
-  notice.innerHTML =
-    '<svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true">' +
-    '<rect x="7" y="2.5" width="10" height="19" rx="2.2" />' +
-    '<path d="M12 18.4h.01" />' +
-    '</svg><p>세로 화면으로 돌려주세요</p>';
-  document.body.append(notice);
+  const apply = () => {
+    const angle = (screen.orientation && typeof screen.orientation.angle === "number")
+      ? screen.orientation.angle
+      : (typeof window.orientation === "number" ? window.orientation : 0);
+    const a = ((angle % 360) + 360) % 360;
+
+    // 화면이 돌아간 반대 방향으로 내용을 돌린다
+    if (a === 90) document.body.dataset.rotate = "ccw";
+    else if (a === 270) document.body.dataset.rotate = "cw";
+    else delete document.body.dataset.rotate;
+  };
+
+  apply();
+  window.addEventListener("orientationchange", apply);
+  window.addEventListener("resize", apply);
+  if (screen.orientation) screen.orientation.addEventListener("change", apply);
 }
 
 /* ── 오른쪽 상단 메뉴 ──
