@@ -98,15 +98,19 @@ function initPortraitLock() {
     const a = ((angle % 360) + 360) % 360;
 
     // 화면이 돌아간 반대 방향으로 내용을 돌린다
-    if (a === 90) document.body.dataset.rotate = "ccw";
-    else if (a === 270) document.body.dataset.rotate = "cw";
-    else delete document.body.dataset.rotate;
+    const root = document.documentElement;
+    if (a === 90) root.dataset.rotate = "ccw";
+    else if (a === 270) root.dataset.rotate = "cw";
+    else delete root.dataset.rotate;
   };
 
   apply();
-  window.addEventListener("orientationchange", apply);
-  window.addEventListener("resize", apply);
-  if (screen.orientation) screen.orientation.addEventListener("change", apply);
+  // iOS 는 회전 애니메이션 도중에 값이 바뀌므로 여러 시점에서 다시 확인한다
+  const applySoon = () => { apply(); requestAnimationFrame(apply); setTimeout(apply, 120); };
+  window.addEventListener("orientationchange", applySoon);
+  window.addEventListener("resize", applySoon);
+  window.addEventListener("pageshow", applySoon);
+  if (screen.orientation) screen.orientation.addEventListener("change", applySoon);
 }
 
 /* ── 오른쪽 상단 메뉴 ──

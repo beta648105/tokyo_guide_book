@@ -461,14 +461,20 @@ body[data-view="schedule"] .menu-btn { display: none; }
 
 /* ── 세로 고정 ──
    폰이 가로로 누우면 화면이 돌아간 만큼 내용을 반대로 돌려
-   세로 화면 그대로인 것처럼 보이게 한다. PC 는 해당 없음. */
-@media (orientation: landscape) and (pointer: coarse) and (max-height: 600px) {
-  html {
+   세로 화면 그대로인 것처럼 보이게 한다.
+
+   적용 시점은 common.js 가 <html data-rotate> 로 직접 정한다.
+   (화면 방향 미디어 쿼리에 맡기면 iOS 회전 애니메이션이 끝난 뒤에야 걸린다)
+
+   크기와 이동량은 반드시 같은 단위로 맞출 것. vh 와 dvh 를 섞으면
+   사파리 주소창 높이만큼 화면이 옆으로 밀린다. */
+@media (pointer: coarse) {
+  html[data-rotate] {
     height: 100%;
     overflow: hidden;
   }
 
-  body {
+  html[data-rotate] body {
     position: fixed;
     top: 0;
     left: 0;
@@ -479,13 +485,21 @@ body[data-view="schedule"] .menu-btn { display: none; }
     overflow-x: hidden;
     overflow-y: auto;
     transform-origin: top left;
+    transition: none;
   }
 
-  body[data-rotate="cw"]  { transform: translateX(100vw) rotate(90deg); }
-  body[data-rotate="ccw"] { transform: translateY(100vh) rotate(-90deg); }
+  html[data-rotate="cw"] body {
+    transform: translateX(100vw) rotate(90deg);
+    transform: translateX(100dvw) rotate(90deg);
+  }
+
+  html[data-rotate="ccw"] body {
+    transform: translateY(100vh) rotate(-90deg);
+    transform: translateY(100dvh) rotate(-90deg);
+  }
 
   /* 돌아간 상자를 기준으로 높이를 잡는다 */
-  .app { min-height: 100%; }
+  html[data-rotate] .app { min-height: 100%; }
 }
 
 /* JS 가 꺼져 있을 때 */
