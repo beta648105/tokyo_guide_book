@@ -502,6 +502,26 @@ body[data-view="schedule"] .menu-btn { display: none; }
   html[data-rotate] .app { min-height: 100%; }
 }
 
+/* 회전하는 동안 화면을 덮는 판.
+   어느 방향으로 돌아가 있어도 덮이도록 화면보다 훨씬 크게 잡는다. */
+.rotate-mask {
+  position: fixed;
+  top: -100vmax;
+  left: -100vmax;
+  width: 300vmax;
+  height: 300vmax;
+  z-index: 100;
+  background: var(--bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease 0.06s;
+}
+
+html[data-rotating] .rotate-mask {
+  opacity: 1;
+  transition: none;          /* 켤 때는 즉시 */
+}
+
 /* JS 가 꺼져 있을 때 */
 .noscript {
   padding: 40px var(--pad);

@@ -91,6 +91,23 @@ function initPortraitLock() {
     screen.orientation.lock("portrait").catch(() => {});
   }
 
+  // 돌아가는 동안 화면을 덮을 판. iOS 의 회전 애니메이션 자체는 못 없애지만
+  // 내용이 옆으로 쓸려 가는 모습은 가릴 수 있다.
+  const mask = document.createElement("div");
+  mask.className = "rotate-mask";
+  document.body.append(mask);
+
+  const isPhone = () => window.matchMedia("(pointer: coarse)").matches;
+  let maskTimer = 0;
+
+  const coverWhileTurning = () => {
+    if (!isPhone()) return;
+    const root = document.documentElement;
+    root.dataset.rotating = "";
+    clearTimeout(maskTimer);
+    maskTimer = setTimeout(() => { delete root.dataset.rotating; }, 560);
+  };
+
   const apply = () => {
     const angle = (screen.orientation && typeof screen.orientation.angle === "number")
       ? screen.orientation.angle
@@ -106,7 +123,13 @@ function initPortraitLock() {
 
   apply();
   // iOS 는 회전 애니메이션 도중에 값이 바뀌므로 여러 시점에서 다시 확인한다
-  const applySoon = () => { apply(); requestAnimationFrame(apply); setTimeout(apply, 120); };
+  const applySoon = () => {
+    coverWhileTurning();
+    apply();
+    requestAnimationFrame(apply);
+    setTimeout(apply, 120);
+    setTimeout(apply, 320);
+  };
   window.addEventListener("orientationchange", applySoon);
   window.addEventListener("resize", applySoon);
   window.addEventListener("pageshow", applySoon);
