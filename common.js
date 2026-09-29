@@ -80,62 +80,6 @@ function initPageTransitions() {
   });
 }
 
-/* ── 세로 화면 고정 ──
-   아이폰 사파리에는 화면 잠금 API 가 없어서 진짜로 잠글 수는 없다.
-   그래서 기기가 가로로 누우면 화면이 돌아간 만큼 내용을 반대로 되돌려,
-   세로로 고정된 앱처럼 보이게 한다.
-   (안드로이드 설치형 앱은 아래 lock 으로 실제로 잠긴다) */
-
-function initPortraitLock() {
-  if (screen.orientation && screen.orientation.lock) {
-    screen.orientation.lock("portrait").catch(() => {});
-  }
-
-  // 돌아가는 동안 화면을 덮을 판. iOS 의 회전 애니메이션 자체는 못 없애지만
-  // 내용이 옆으로 쓸려 가는 모습은 가릴 수 있다.
-  const mask = document.createElement("div");
-  mask.className = "rotate-mask";
-  document.body.append(mask);
-
-  const isPhone = () => window.matchMedia("(pointer: coarse)").matches;
-  let maskTimer = 0;
-
-  const coverWhileTurning = () => {
-    if (!isPhone()) return;
-    const root = document.documentElement;
-    root.dataset.rotating = "";
-    clearTimeout(maskTimer);
-    maskTimer = setTimeout(() => { delete root.dataset.rotating; }, 560);
-  };
-
-  const apply = () => {
-    const angle = (screen.orientation && typeof screen.orientation.angle === "number")
-      ? screen.orientation.angle
-      : (typeof window.orientation === "number" ? window.orientation : 0);
-    const a = ((angle % 360) + 360) % 360;
-
-    // 화면이 돌아간 반대 방향으로 내용을 돌린다
-    const root = document.documentElement;
-    if (a === 90) root.dataset.rotate = "ccw";
-    else if (a === 270) root.dataset.rotate = "cw";
-    else delete root.dataset.rotate;
-  };
-
-  apply();
-  // iOS 는 회전 애니메이션 도중에 값이 바뀌므로 여러 시점에서 다시 확인한다
-  const applySoon = () => {
-    coverWhileTurning();
-    apply();
-    requestAnimationFrame(apply);
-    setTimeout(apply, 120);
-    setTimeout(apply, 320);
-  };
-  window.addEventListener("orientationchange", applySoon);
-  window.addEventListener("resize", applySoon);
-  window.addEventListener("pageshow", applySoon);
-  if (screen.orientation) screen.orientation.addEventListener("change", applySoon);
-}
-
 /* ── 오른쪽 상단 메뉴 ──
    가로선 3개 버튼을 누르면 오른쪽에서 패널이 절반 폭만큼 밀려 나온다.
    항목은 아직 누르는 동작이 없다. */

@@ -253,7 +253,6 @@ body {
   }
 
   .hero-title { font-size: 44px; }
-  .hero-title-alt { font-size: 38px; }
 
   /* 카드가 정사각형이면 너무 거대해지므로 가로로 눕힌다 */
   .card { aspect-ratio: 16 / 10; }
@@ -433,7 +432,33 @@ body[data-view="schedule"] .menu-btn { display: none; }
 
 .hero-title-alt {
   font-size: 30px;
-  bottom: 10px;
+  bottom: 16px;
+}
+
+/* 글자 길이에 맞춘 회색 막대 (inline-block 이라 폭이 글자 폭과 같다) */
+.hero-title-alt span {
+  display: inline-block;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+.hero-title-alt span::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 7px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: #bcc2cc;
+}
+
+/* 넓은 화면에서는 제목과 막대도 같이 커진다.
+   (기본 규칙 뒤에 와야 적용된다 - 미디어 쿼리는 우선순위를 높이지 않는다) */
+@media (min-width: 700px) {
+  .hero-title-alt { font-size: 38px; }
+  .hero-title-alt span::after { height: 9px; margin-top: 14px; }
 }
 
 .hero-title[hidden] { display: none; }
@@ -457,69 +482,6 @@ body[data-view="schedule"] .menu-btn { display: none; }
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.3px;
-}
-
-/* ── 세로 고정 ──
-   폰이 가로로 누우면 화면이 돌아간 만큼 내용을 반대로 돌려
-   세로 화면 그대로인 것처럼 보이게 한다.
-
-   적용 시점은 common.js 가 <html data-rotate> 로 직접 정한다.
-   (화면 방향 미디어 쿼리에 맡기면 iOS 회전 애니메이션이 끝난 뒤에야 걸린다)
-
-   크기와 이동량은 반드시 같은 단위로 맞출 것. vh 와 dvh 를 섞으면
-   사파리 주소창 높이만큼 화면이 옆으로 밀린다. */
-@media (pointer: coarse) {
-  html[data-rotate] {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  html[data-rotate] body {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vh;
-    height: 100vw;
-    width: 100dvh;
-    height: 100dvw;
-    overflow-x: hidden;
-    overflow-y: auto;
-    transform-origin: top left;
-    transition: none;
-  }
-
-  html[data-rotate="cw"] body {
-    transform: translateX(100vw) rotate(90deg);
-    transform: translateX(100dvw) rotate(90deg);
-  }
-
-  html[data-rotate="ccw"] body {
-    transform: translateY(100vh) rotate(-90deg);
-    transform: translateY(100dvh) rotate(-90deg);
-  }
-
-  /* 돌아간 상자를 기준으로 높이를 잡는다 */
-  html[data-rotate] .app { min-height: 100%; }
-}
-
-/* 회전하는 동안 화면을 덮는 판.
-   어느 방향으로 돌아가 있어도 덮이도록 화면보다 훨씬 크게 잡는다. */
-.rotate-mask {
-  position: fixed;
-  top: -100vmax;
-  left: -100vmax;
-  width: 300vmax;
-  height: 300vmax;
-  z-index: 100;
-  background: var(--bg);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease 0.06s;
-}
-
-html[data-rotating] .rotate-mask {
-  opacity: 1;
-  transition: none;          /* 켤 때는 즉시 */
 }
 
 /* JS 가 꺼져 있을 때 */

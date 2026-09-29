@@ -7,4 +7,3 @@ initViews();
 registerServiceWorker();
 initPageTransitions();
 initMenu();
-initPortraitLock();
