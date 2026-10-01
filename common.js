@@ -86,13 +86,19 @@ function initPageTransitions() {
 
 const MENU_ITEMS = [
   { label: "일정표", view: "schedule" },
+  { label: "홈 화면 추가", view: "install" },
 ];
 
 /* ── 섹션 전환 ──
    어느 페이지에서든 상단 사진은 그대로 두고 그 아래만 바꾼다.
    시부야에서 열면 시부야 사진이, 홈에서 열면 도쿄 사진이 그대로 남는다. */
 
-const VIEWS = ["main", "schedule"];
+const VIEWS = ["main", "schedule", "install"];
+
+/** 메뉴로 연 화면에서 사진 아래에 표시할 제목 */
+const VIEW_TITLES = Object.fromEntries(
+  MENU_ITEMS.map((item) => [item.view, item.label])
+);
 
 function showView(view) {
   if (!VIEWS.includes(view)) view = "main";
@@ -106,7 +112,11 @@ function showView(view) {
   const mainTitle = document.querySelector(".hero-title:not(.hero-title-alt)");
   const altTitle = document.querySelector(".hero-title-alt");
   if (mainTitle) mainTitle.hidden = view !== "main";
-  if (altTitle) altTitle.hidden = view === "main";
+  if (altTitle) {
+    altTitle.hidden = view === "main";
+    const label = altTitle.querySelector("span");
+    if (label && VIEW_TITLES[view]) label.textContent = VIEW_TITLES[view];
+  }
 
   document.body.dataset.view = view;
   const url = view === "main" ? location.pathname : `#${view}`;
