@@ -473,6 +473,54 @@ body:not([data-view="main"]) .menu-btn { display: none; }
   min-height: 120px;
 }
 
+/* ── 홈 화면 추가 안내 ──
+   가운데 정렬, 폭은 화면의 절반 정도만 */
+.guide {
+  width: 50%;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.guide-step {
+  counter-increment: step;
+}
+
+.guide-step img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #d0d5dd;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.guide-text {
+  margin: 12px 0 0;
+  text-align: center;
+  font-family: var(--font-ko);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.55;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.guide-text::before {
+  content: counter(step) ". ";
+  color: var(--sub);
+}
+
+@media (min-width: 700px) {
+  .guide-text { font-size: 15px; }
+}
+
 /* ── 지역 페이지 본문 ── */
 .page-body {
   padding: 8px var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));

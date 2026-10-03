@@ -23,6 +23,50 @@ const AREAS = [
   { id: null, name: "준비중", roman: "", image: null, page: null, ready: false },
 ];
 
+/* ── 홈 화면 추가 안내 ──
+   내용 출처: text/guide.txt
+   (대괄호 안이 images 폴더의 이미지 이름, 그 아래 줄이 설명) */
+
+const GUIDE_STEPS = [
+  { image: "images/guide_1.jpg", text: "사파리에서 웹을 연 다음, 오른쪽 하단 ··· 누른 다음 공유 클릭" },
+  { image: "images/guide_2.jpg", text: "더 보기 클릭" },
+  { image: "images/guide_3.jpg", text: "홈 화면에 추가 클릭" },
+  { image: "images/guide_4.jpg", text: "추가 클릭" },
+  { image: "images/guide_5.jpg", text: "" },
+];
+
+/** 홈 화면 추가 안내를 그린다. 세 페이지가 같은 내용을 쓴다. */
+function renderGuide() {
+  const section = document.getElementById("view-install");
+  if (!section) return;
+
+  const list = document.createElement("ol");
+  list.className = "guide";
+
+  for (const [i, step] of GUIDE_STEPS.entries()) {
+    const item = document.createElement("li");
+    item.className = "guide-step";
+
+    const img = document.createElement("img");
+    img.src = step.image;
+    img.alt = step.text || `${i + 1}단계`;
+    img.loading = "lazy";
+    img.decoding = "async";
+    item.append(img);
+
+    if (step.text) {
+      const caption = document.createElement("p");
+      caption.className = "guide-text";
+      caption.textContent = step.text;
+      item.append(caption);
+    }
+
+    list.append(item);
+  }
+
+  section.replaceChildren(list);
+}
+
 /** 안드로이드에서 '앱 설치'가 뜨도록 서비스 워커를 등록한다. */
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
