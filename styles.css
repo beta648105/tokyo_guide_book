@@ -146,6 +146,9 @@ body {
 .menu-btn:active,
 .back-btn:active { transform: scale(0.95); }
 
+/* 되돌아가기 아이콘은 시계 방향으로 90도 (왼쪽을 가리키게) */
+.back-btn svg { transform: rotate(90deg); }
+
 /* ── 오른쪽에서 밀려 나오는 설정 패널 ── */
 .scrim {
   position: fixed;
