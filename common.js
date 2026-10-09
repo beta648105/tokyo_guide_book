@@ -138,22 +138,26 @@ function buildSpot(spot) {
   const section = document.createElement("section");
   section.className = "spot";
 
+  // 사진(왼쪽) + 제목·펼치기 버튼(오른쪽)
+  const head = document.createElement("div");
+  head.className = "spot-head";
+
   const img = document.createElement("img");
   img.className = "spot-img";
   img.src = spot.image;
   img.alt = spot.title;
   img.loading = "lazy";
   img.decoding = "async";
-  section.append(img);
 
-  // 제목 + 펼치기 버튼
-  const head = document.createElement("div");
-  head.className = "spot-head";
+  const side = document.createElement("div");
+  side.className = "spot-head-side";
   const title = document.createElement("h2");
   title.className = "spot-title";
   title.textContent = spot.title;
   const toggle = buildToggle();
-  head.append(title, toggle);
+  side.append(title, toggle);
+
+  head.append(img, side);
   section.append(head);
 
   // 펼쳐지는 내용

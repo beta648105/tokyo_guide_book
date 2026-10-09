@@ -576,25 +576,38 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   margin-bottom: 30px;
 }
 
-.spot-img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* 제목 + 펼치기 버튼 */
+/* 사진은 왼쪽 끝에 붙고, 제목과 버튼이 오른쪽에 온다 */
 .spot-head {
   display: flex;
   align-items: center;
+  gap: 14px;
+  padding-right: var(--text-pad);
+}
+
+.spot-img {
+  display: block;
+  flex: none;
+  width: 44%;
+  max-width: 300px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.spot-head-side {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px var(--text-pad) 0;
+  gap: 10px;
 }
 
 .spot-title {
   margin: 0;
+  min-width: 0;
+  word-break: keep-all;
   font-family: var(--font-title);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.5px;
   color: var(--text);
@@ -649,6 +662,9 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   min-height: 0;
   padding: 0 var(--text-pad);
 }
+
+/* 펼쳤을 때 사진 아래로 내용이 붙어 보이지 않게 */
+.spot.open .spot-body-inner { padding-bottom: 4px; }
 
 .spot-line {
   margin: 12px 0 0;
@@ -730,7 +746,7 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 
 @media (min-width: 700px) {
   .page-body { --text-pad: 26px; }
-  .spot-title { font-size: 30px; }
+  .spot-title { font-size: 28px; }
   .spot-line { font-size: 17px; }
   .spot-meta { font-size: 16px; }
   .floors { font-size: 15px; }
