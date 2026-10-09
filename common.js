@@ -244,6 +244,16 @@ function renderSpots(data) {
     tag.textContent = `‘${data.tagline}’`;
     parts.push(tag);
   }
+  if (data.intro && data.intro.length) {
+    const intro = document.createElement("div");
+    intro.className = "spot-intro";
+    for (const text of data.intro) {
+      const p = document.createElement("p");
+      p.textContent = text;
+      intro.append(p);
+    }
+    parts.push(intro);
+  }
   for (const spot of data.spots) parts.push(buildSpot(spot));
   main.replaceChildren(...parts);
 }

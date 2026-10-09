@@ -573,6 +573,25 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   color: var(--sub);
 }
 
+/* 지역 소개글 (태그라인과 첫 장소 사이) */
+.spot-intro {
+  margin: 0 0 40px;
+  padding: 0 var(--text-pad);
+}
+
+.spot-intro p {
+  margin: 0 0 14px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.75;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.spot-intro p:last-child { margin-bottom: 0; }
+
 .spot {
   margin-bottom: 30px;
 }
@@ -759,6 +778,7 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   .spot-title { font-size: 28px; }
   .spot-line { font-size: 17px; }
   .spot-tagline { font-size: 20px; }
+  .spot-intro p { font-size: 16.5px; }
   .spot-meta { font-size: 16px; }
   .floors { font-size: 15px; }
 }
