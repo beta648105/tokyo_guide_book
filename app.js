@@ -52,6 +52,7 @@ function renderGrid() {
 }
 
 renderGrid();
+renderTimeline();
 renderGuide();
 initViews();
 registerServiceWorker();

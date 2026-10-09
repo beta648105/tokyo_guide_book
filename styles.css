@@ -101,8 +101,9 @@ body {
 
 .home-btn:active { transform: scale(0.95); }
 
-/* ── 오른쪽 상단 메뉴 버튼 (가로선 3개) ── */
-.menu-btn {
+/* ── 오른쪽 상단 버튼 (메뉴 / 되돌아가기) ── */
+.menu-btn,
+.back-btn {
   position: absolute;
   z-index: 25;
   top: calc(env(safe-area-inset-top) + 12px);
@@ -123,7 +124,8 @@ body {
   transition: transform 0.25s var(--ease-out), background 0.25s var(--ease-out);
 }
 
-.menu-btn svg {
+.menu-btn svg,
+.back-btn svg {
   width: 20px;
   height: 20px;
   flex: none;
@@ -134,13 +136,15 @@ body {
 }
 
 @media (hover: hover) {
-  .menu-btn:hover {
+  .menu-btn:hover,
+  .back-btn:hover {
     transform: scale(1.09);
     background: rgba(255, 255, 255, 0.95);
   }
 }
 
-.menu-btn:active { transform: scale(0.95); }
+.menu-btn:active,
+.back-btn:active { transform: scale(0.95); }
 
 /* ── 오른쪽에서 밀려 나오는 설정 패널 ── */
 .scrim {
@@ -434,7 +438,10 @@ body {
 
 /* ── 메뉴로 연 화면 (일정표 · 홈 화면 추가) ──
    상단 이미지만 남기고, 제목 자리에 그 항목 이름을 넣는다. */
+.back-btn { display: none; }
+
 body:not([data-view="main"]) .menu-btn { display: none; }
+body:not([data-view="main"]) .back-btn { display: flex; }
 
 .hero-title-alt {
   font-size: 30px;
@@ -472,6 +479,27 @@ body:not([data-view="main"]) .menu-btn { display: none; }
 .view-panel {
   padding: 14px var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));
   min-height: 120px;
+}
+
+/* ── 일정표 ──
+   좌우 여백 없이 가로로 꽉 채운다 */
+#view-schedule {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.timeline-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 넓은 화면에서는 원본(618px)보다 너무 키우면 흐려지므로 제한 */
+@media (min-width: 1000px) {
+  .timeline-img {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 }
 
 /* ── 홈 화면 추가 안내 ──

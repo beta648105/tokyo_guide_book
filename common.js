@@ -65,6 +65,20 @@ const GUIDE_STEPS = [
   { image: "images/guide/guide_5.jpg", text: "" },
 ];
 
+/** 일정표를 그린다. */
+function renderTimeline() {
+  const section = document.getElementById("view-schedule");
+  if (!section) return;
+
+  const img = document.createElement("img");
+  img.className = "timeline-img";
+  img.src = "images/timeline/timeline.jpg";
+  img.alt = "여행 일정표";
+  img.loading = "lazy";
+  img.decoding = "async";
+  section.replaceChildren(img);
+}
+
 /** 홈 화면 추가 안내를 그린다. 세 페이지가 같은 내용을 쓴다. */
 function renderGuide() {
   const section = document.getElementById("view-install");
@@ -234,6 +248,20 @@ function buildMenuButton() {
   return btn;
 }
 
+/** 메뉴로 연 화면에서 쓰는 되돌아가기 버튼 (메뉴 버튼 자리에 대신 들어간다) */
+function buildBackButton() {
+  const btn = document.createElement("button");
+  btn.className = "back-btn";
+  btn.type = "button";
+  btn.setAttribute("aria-label", "이전 화면으로");
+  btn.innerHTML =
+    '<svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path d="M18 20v-6.5a5.5 5.5 0 0 0-11 0V18" />' +
+    '<path d="M3.5 14.5 7 18l3.5-3.5" /></svg>';
+  btn.addEventListener("click", () => showView("main"));
+  return btn;
+}
+
 function buildDrawer() {
   const drawer = document.createElement("aside");
   drawer.className = "drawer";
@@ -263,10 +291,11 @@ function initMenu() {
   if (!app) return;
 
   const btn = buildMenuButton();
+  const back = buildBackButton();
   const scrim = document.createElement("div");
   scrim.className = "scrim";
   const drawer = buildDrawer();
-  app.append(btn);
+  app.append(btn, back);
   // 패널과 배경은 body 에 붙인다. .app 은 페이지 전환 때 transform 이 걸리는데
   // transform 이 걸린 조상 안에서는 position: fixed 가 그 조상 기준으로 바뀌어
   // 패널이 잠깐 화면 안으로 튀어 들어온다.
