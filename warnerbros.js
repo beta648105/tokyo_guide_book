@@ -48,7 +48,7 @@ const WARNERBROS = {
       items: [
         {
           image: "images/warnerbros/warnerbros7.jpg",
-          side: "left",
+          side: "top",          // 사진 위, 설명 아래
           text: "스튜디오 숍은 세계 최대 규모의 해리포터 숍이고, 레일웨이 숍은 9와 3/4 승강장 근처에서 호그와트 급행열차 상품만 판다.",
         },
         {

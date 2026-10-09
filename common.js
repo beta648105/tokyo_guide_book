@@ -277,7 +277,8 @@ function fillLabeled(el, text) {
 /** 사진 + 설명 한 줄 */
 function buildShowcaseItem(item) {
   const row = document.createElement("div");
-  row.className = item.side === "right" ? "wb-item right reveal" : "wb-item reveal";
+  const place = item.side === "right" ? " right" : item.side === "top" ? " top" : "";
+  row.className = `wb-item${place} reveal`;
 
   const img = document.createElement("img");
   img.src = item.image;

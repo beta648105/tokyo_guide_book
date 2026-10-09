@@ -612,6 +612,23 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   padding-left: var(--text-pad);
 }
 
+/* 사진 위, 설명 아래 */
+.wb-item.top {
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.wb-item.top img {
+  width: 100%;
+  max-width: none;
+}
+
+.wb-item.top .wb-text {
+  padding: 0 var(--text-pad);
+}
+
 .wb-item img {
   flex: none;
   width: 42%;
