@@ -5,21 +5,23 @@
  * 내용을 크게 바꿨을 땐 CACHE 버전을 올린다.
  */
 
-const CACHE = "tokyo-guide-v25";
+const CACHE = "tokyo-guide-v26";
 
 const PRECACHE = [
   "./",
   "index.html",
-  "shibuya.html",
+  "odaiba.html",
+  "diversity.html",
   "akihabara.html",
+  "warnerbros.html",
+  "disney.html",
+  "naritasan.html",
   "styles.css",
   "app.js",
   "common.js",
   "area.js",
   "manifest.webmanifest",
-  "images/tokyo.png",
-  "images/shibuya.png",
-  "images/akihabara.png",
+  "images/home/tokyo.png",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-maskable-512.png",

@@ -4,23 +4,53 @@
 
 const AREAS = [
   {
-    id: "shibuya",
-    name: "시부야",
-    roman: "SHIBUYA",
-    image: "images/shibuya.png",
-    page: "shibuya.html",
+    id: "odaiba",
+    name: "오다이바",
+    roman: "ODAIBA",
+    image: "images/home/odaiba.jpg",
+    page: "odaiba.html",
+    ready: true,
+  },
+  {
+    id: "diversity",
+    name: "다이버시티",
+    roman: "DIVERCITY",
+    image: "images/home/diceverity.jpg",
+    page: "diversity.html",
     ready: true,
   },
   {
     id: "akihabara",
     name: "아키하바라",
     roman: "AKIHABARA",
-    image: "images/akihabara.png",
+    image: "images/home/akihabara.png",
     page: "akihabara.html",
     ready: true,
   },
-  { id: null, name: "준비중", roman: "", image: null, page: null, ready: false },
-  { id: null, name: "준비중", roman: "", image: null, page: null, ready: false },
+  {
+    id: "warnerbros",
+    name: "워너브라더스",
+    roman: "WARNER BROS",
+    image: "images/home/warnerbros.jpg",
+    page: "warnerbros.html",
+    ready: true,
+  },
+  {
+    id: "disney",
+    name: "디즈니씨",
+    roman: "DISNEYSEA",
+    image: "images/home/disney.jpg",
+    page: "disney.html",
+    ready: true,
+  },
+  {
+    id: "naritasan",
+    name: "신승사",
+    roman: "NARITASAN",
+    image: "images/home/naritasan.jpg",
+    page: "naritasan.html",
+    ready: true,
+  },
 ];
 
 /* ── 홈 화면 추가 안내 ──
@@ -28,11 +58,11 @@ const AREAS = [
    (대괄호 안이 images 폴더의 이미지 이름, 그 아래 줄이 설명) */
 
 const GUIDE_STEPS = [
-  { image: "images/guide_1.jpg", text: "사파리에서 웹을 연 다음, 오른쪽 하단 ··· 누른 다음 공유 클릭" },
-  { image: "images/guide_2.jpg", text: "더 보기 클릭" },
-  { image: "images/guide_3.jpg", text: "홈 화면에 추가 클릭" },
-  { image: "images/guide_4.jpg", text: "추가 클릭" },
-  { image: "images/guide_5.jpg", text: "" },
+  { image: "images/guide/guide_1.jpg", text: "사파리에서 웹을 연 다음, 오른쪽 하단 ··· 누른 다음 공유 클릭" },
+  { image: "images/guide/guide_2.jpg", text: "더 보기 클릭" },
+  { image: "images/guide/guide_3.jpg", text: "홈 화면에 추가 클릭" },
+  { image: "images/guide/guide_4.jpg", text: "추가 클릭" },
+  { image: "images/guide/guide_5.jpg", text: "" },
 ];
 
 /** 홈 화면 추가 안내를 그린다. 세 페이지가 같은 내용을 쓴다. */
