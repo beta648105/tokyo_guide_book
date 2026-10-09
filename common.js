@@ -111,6 +111,136 @@ function renderGuide() {
   section.replaceChildren(list);
 }
 
+/* ── 장소 목록 (지역 페이지 본문) ──
+   사진 + 제목 + 펼치기 버튼, 버튼을 누르면 상세가 아래로 펼쳐진다. */
+
+/** 구글 지도 검색 링크 */
+function mapsLink(name, address) {
+  const q = encodeURIComponent(`${name} ${address}`);
+  return `https://www.google.com/maps/search/?api=1&query=${q}`;
+}
+
+/** 펼치기/접기 버튼 (검은 동그라미 안 흰 화살표) */
+function buildToggle() {
+  const btn = document.createElement("button");
+  btn.className = "spot-toggle";
+  btn.type = "button";
+  btn.setAttribute("aria-expanded", "false");
+  btn.setAttribute("aria-label", "자세히 보기");
+  btn.innerHTML =
+    '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path d="M9 5.5 15.5 12 9 18.5" /></svg>';
+  return btn;
+}
+
+/** 한 장소 블록을 만든다. */
+function buildSpot(spot) {
+  const section = document.createElement("section");
+  section.className = "spot";
+
+  const img = document.createElement("img");
+  img.className = "spot-img";
+  img.src = spot.image;
+  img.alt = spot.title;
+  img.loading = "lazy";
+  img.decoding = "async";
+  section.append(img);
+
+  // 제목 + 펼치기 버튼
+  const head = document.createElement("div");
+  head.className = "spot-head";
+  const title = document.createElement("h2");
+  title.className = "spot-title";
+  title.textContent = spot.title;
+  const toggle = buildToggle();
+  head.append(title, toggle);
+  section.append(head);
+
+  // 펼쳐지는 내용
+  const body = document.createElement("div");
+  body.className = "spot-body";
+  const inner = document.createElement("div");
+  inner.className = "spot-body-inner";
+
+  for (const line of spot.lines) {
+    const p = document.createElement("p");
+    p.className = "spot-line";
+    p.textContent = line;
+    inner.append(p);
+  }
+
+  const meta = document.createElement("dl");
+  meta.className = "spot-meta";
+
+  const addrKey = document.createElement("dt");
+  addrKey.textContent = "주소";
+  const addrVal = document.createElement("dd");
+  const link = document.createElement("a");
+  link.href = mapsLink(spot.title, spot.address);
+  link.textContent = spot.address;
+  link.target = "_blank";
+  link.rel = "noopener";
+  addrVal.append(link);
+
+  const hoursKey = document.createElement("dt");
+  hoursKey.textContent = "영업시간";
+  const hoursVal = document.createElement("dd");
+  hoursVal.textContent = spot.hours;
+
+  meta.append(addrKey, addrVal, hoursKey, hoursVal);
+  inner.append(meta);
+
+  if (spot.floors && spot.floors.length) {
+    const heading = document.createElement("h3");
+    heading.className = "floors-title";
+    heading.textContent = "층별 안내";
+    inner.append(heading);
+
+    const table = document.createElement("table");
+    table.className = "floors";
+    const tbody = document.createElement("tbody");
+    for (const row of spot.floors) {
+      const tr = document.createElement("tr");
+      for (const [i, cell] of row.entries()) {
+        const td = document.createElement("td");
+        td.textContent = cell;
+        if (i === 0) td.className = "floor-no";
+        tr.append(td);
+      }
+      tbody.append(tr);
+    }
+    table.append(tbody);
+    inner.append(table);
+  }
+
+  body.append(inner);
+  section.append(body);
+
+  toggle.addEventListener("click", () => {
+    const open = section.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "접기" : "자세히 보기");
+  });
+
+  return section;
+}
+
+/** 지역 페이지 본문을 그린다. */
+function renderSpots(data) {
+  const main = document.getElementById("view-main");
+  if (!main) return;
+
+  const parts = [];
+  if (data.tagline) {
+    const tag = document.createElement("p");
+    tag.className = "spot-tagline";
+    tag.textContent = `‘${data.tagline}’`;
+    parts.push(tag);
+  }
+  for (const spot of data.spots) parts.push(buildSpot(spot));
+  main.replaceChildren(...parts);
+}
+
 /** 안드로이드에서 '앱 설치'가 뜨도록 서비스 워커를 등록한다. */
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
