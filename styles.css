@@ -581,6 +581,7 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 
 .spot-intro p {
   margin: 0 0 14px;
+  text-indent: 1em;        /* txt 의 문단 앞 띄어쓰기 */
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 500;
