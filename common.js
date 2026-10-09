@@ -258,6 +258,120 @@ function renderSpots(data) {
   main.replaceChildren(...parts);
 }
 
+/* ── 섹션형 지역 페이지 (관광 / 체험 / 샵 …) ──
+   펼치고 접는 것 없이, 사진과 설명이 좌우로 번갈아 놓인다.
+   소개글 아래부터는 스크롤을 처음 내릴 때 순서대로 나타난다. */
+
+/** "제목: 내용" 이면 제목만 굵게 */
+function fillLabeled(el, text) {
+  const at = text.indexOf(": ");
+  if (at > 0 && at < 40) {
+    const label = document.createElement("b");
+    label.textContent = text.slice(0, at);
+    el.append(label, text.slice(at));
+  } else {
+    el.textContent = text;
+  }
+}
+
+/** 사진 + 설명 한 줄 */
+function buildShowcaseItem(item) {
+  const row = document.createElement("div");
+  row.className = item.side === "right" ? "wb-item right reveal" : "wb-item reveal";
+
+  const img = document.createElement("img");
+  img.src = item.image;
+  img.alt = "";
+  img.loading = "lazy";
+  img.decoding = "async";
+
+  const p = document.createElement("p");
+  p.className = "wb-text";
+  fillLabeled(p, item.text);
+
+  row.append(img, p);
+  return row;
+}
+
+/** 스크롤을 처음 내릴 때 순서대로 나타나게 한다. 한 번 나오면 그대로 둔다. */
+function initReveal(root) {
+  const targets = [...root.querySelectorAll(".reveal")];
+  if (!targets.length) return;
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced || !("IntersectionObserver" in window)) {
+    for (const el of targets) el.classList.add("shown");
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    // 같이 들어온 것들끼리 위에서 아래로 시차를 준다
+    const batch = entries.filter((e) => e.isIntersecting);
+    batch.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    batch.forEach((entry, i) => {
+      entry.target.style.setProperty("--delay", `${i * 0.09}s`);
+      entry.target.classList.add("shown");
+      observer.unobserve(entry.target);   // 다시는 애니메이션하지 않음
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+
+  for (const el of targets) observer.observe(el);
+}
+
+/** 섹션형 본문을 그린다. */
+function renderShowcase(data) {
+  const main = document.getElementById("view-main");
+  if (!main) return;
+
+  const parts = [];
+
+  if (data.tagline) {
+    const tag = document.createElement("p");
+    tag.className = "spot-tagline";
+    tag.textContent = `‘${data.tagline}’`;
+    parts.push(tag);
+  }
+
+  if (data.intro && data.intro.length) {
+    const intro = document.createElement("div");
+    intro.className = "spot-intro";
+    for (const text of data.intro) {
+      const p = document.createElement("p");
+      p.textContent = text;
+      intro.append(p);
+    }
+    parts.push(intro);
+  }
+
+  for (const section of data.sections) {
+    const sec = document.createElement("section");
+    sec.className = "wb-section";
+
+    const head = document.createElement("div");
+    head.className = "sec-head reveal";
+    const bar = document.createElement("span");
+    bar.className = "sec-bar";
+    const title = document.createElement("h2");
+    title.className = "sec-title";
+    title.textContent = section.title;
+    head.append(bar, title);
+    sec.append(head);
+
+    if (section.desc) {
+      const desc = document.createElement("p");
+      desc.className = "sec-desc reveal";
+      desc.textContent = section.desc;
+      sec.append(desc);
+    }
+
+    for (const item of section.items) sec.append(buildShowcaseItem(item));
+    parts.push(sec);
+  }
+
+  main.replaceChildren(...parts);
+  initReveal(main);
+}
+
 /** 안드로이드에서 '앱 설치'가 뜨도록 서비스 워커를 등록한다. */
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;

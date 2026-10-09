@@ -554,6 +554,118 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   .guide-text { font-size: 17px; }
 }
 
+/* ── 섹션형 지역 페이지 (관광 / 체험 / 샵) ── */
+.wb-section {
+  margin: 0 0 34px;
+}
+
+/* 제목 왼쪽의 회색 세로 막대 */
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 var(--text-pad);
+  margin-bottom: 8px;
+}
+
+.sec-bar {
+  flex: none;
+  width: 7px;
+  height: 30px;
+  background: #bcc2cc;
+}
+
+.sec-title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+.sec-desc {
+  margin: 0 0 18px;
+  padding: 0 var(--text-pad);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+  word-break: keep-all;
+}
+
+/* 사진 + 설명 한 줄. 사진은 바깥쪽 끝에 붙는다 */
+.wb-item {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-right: var(--text-pad);
+}
+
+.wb-item.right {
+  flex-direction: row-reverse;
+  padding-right: 0;
+  padding-left: var(--text-pad);
+}
+
+.wb-item img {
+  flex: none;
+  width: 42%;
+  max-width: 320px;
+  min-height: 118px;
+  object-fit: cover;
+  display: block;
+}
+
+.wb-text {
+  flex: 1;
+  min-width: 0;
+  align-self: center;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.wb-text b {
+  font-weight: 700;
+}
+
+/* 스크롤을 처음 내릴 때 왼쪽에서 오른쪽으로 나타난다 */
+@keyframes reveal-in {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal.shown {
+  animation: reveal-in 0.62s var(--ease-out) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; }
+  .reveal.shown { animation: none; }
+}
+
+@media (min-width: 700px) {
+  .sec-title { font-size: 30px; }
+  .sec-desc { font-size: 17px; }
+  .wb-text { font-size: 16.5px; }
+  .sec-bar { height: 36px; }
+}
+
 /* ── 지역 페이지 본문 ──
    사진은 좌우로 꽉 차고, 글씨만 안쪽 여백을 가진다 */
 .page-body {
