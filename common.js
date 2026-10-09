@@ -140,7 +140,7 @@ function buildSpot(spot) {
 
   // 사진(왼쪽) + 제목·펼치기 버튼(오른쪽)
   const head = document.createElement("div");
-  head.className = "spot-head";
+  head.className = spot.flip ? "spot-head flip" : "spot-head";
 
   const img = document.createElement("img");
   img.className = "spot-img";

@@ -623,6 +623,21 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   gap: 10px;
 }
 
+/* 좌우를 뒤집은 배치 (사진 오른쪽, 제목·화살표 왼쪽) */
+.spot-head.flip {
+  flex-direction: row-reverse;
+  padding-right: 0;
+  padding-left: var(--text-pad);
+}
+
+.spot-head.flip .spot-head-side {
+  flex-direction: row-reverse;
+}
+
+.spot-head.flip .spot-title {
+  text-align: right;
+}
+
 .spot-title {
   margin: 0;
   min-width: 0;
