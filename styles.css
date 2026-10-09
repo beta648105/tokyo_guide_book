@@ -562,11 +562,12 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 }
 
 .spot-tagline {
-  margin: 4px 0 22px;
+  margin: 22px 0 34px;
   padding: 0 var(--text-pad);
   text-align: center;
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 18px;
+  font-style: italic;
   font-weight: 700;
   letter-spacing: -0.3px;
   color: var(--sub);
@@ -666,8 +667,15 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 /* 펼쳤을 때 사진 아래로 내용이 붙어 보이지 않게 */
 .spot.open .spot-body-inner { padding-bottom: 4px; }
 
+/* 설명글 왼쪽의 세로 회색 막대 */
+.spot-lines {
+  margin: 14px 0 0;
+  padding-left: 13px;
+  border-left: 5px solid #c2c7d0;
+}
+
 .spot-line {
-  margin: 12px 0 0;
+  margin: 0;
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 500;
@@ -676,6 +684,8 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   color: var(--text);
   word-break: keep-all;
 }
+
+.spot-line + .spot-line { margin-top: 8px; }
 
 .spot-meta {
   display: grid;
@@ -748,6 +758,7 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   .page-body { --text-pad: 26px; }
   .spot-title { font-size: 28px; }
   .spot-line { font-size: 17px; }
+  .spot-tagline { font-size: 20px; }
   .spot-meta { font-size: 16px; }
   .floors { font-size: 15px; }
 }

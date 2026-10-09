@@ -166,12 +166,15 @@ function buildSpot(spot) {
   const inner = document.createElement("div");
   inner.className = "spot-body-inner";
 
+  const lines = document.createElement("div");
+  lines.className = "spot-lines";
   for (const line of spot.lines) {
     const p = document.createElement("p");
     p.className = "spot-line";
     p.textContent = line;
-    inner.append(p);
+    lines.append(p);
   }
+  inner.append(lines);
 
   const meta = document.createElement("dl");
   meta.className = "spot-meta";
