@@ -36,7 +36,6 @@ const AKIHABARA = {
     {
       image: "images/akihabara/trader.jpg",
       title: "트레이더",
-      flip: true,          // 사진을 오른쪽에, 제목·화살표를 왼쪽에
       lines: [
         "게임, 피규어, 프라모델, 캐릭터, 굿즈, DVD·블루레이를 파는 중고 중심 종합 매장",
       ],
