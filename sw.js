@@ -5,7 +5,7 @@
  * 내용을 크게 바꿨을 땐 CACHE 버전을 올린다.
  */
 
-const CACHE = "tokyo-guide-v41";
+const CACHE = "tokyo-guide-v42";
 
 const PRECACHE = [
   "./",
@@ -73,9 +73,15 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 나머지는 네트워크 우선, 실패하면 캐시
+  // 나머지(HTML·CSS·JS)는 네트워크 우선.
+  // 깃허브 페이지는 10분짜리 캐시 헤더를 주기 때문에 그냥 fetch 하면
+  // 새 HTML 과 옛 JS 가 섞여 화면이 깨진다. no-cache 로 서버에 매번 확인한다.
+  const fresh = sameOrigin
+    ? fetch(req.url, { cache: "no-cache" })
+    : fetch(req);
+
   event.respondWith(
-    fetch(req)
+    fresh
       .then((res) => {
         if (res.ok && sameOrigin) {
           const copy = res.clone();
@@ -83,6 +89,7 @@ self.addEventListener("fetch", (event) => {
         }
         return res;
       })
-      .catch(() => caches.match(req).then((hit) => hit || caches.match("index.html")))
+      .catch(() => caches.match(req, { ignoreSearch: true })
+        .then((hit) => hit || caches.match("index.html")))
   );
 });

@@ -679,33 +679,25 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   height: auto;
 }
 
-.ds-hero::before,
-.ds-hero::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 15%;
-  pointer-events: none;
-}
-
-.ds-hero::before {
-  top: 0;
-  background: linear-gradient(
+/* 가로로 꽉 차는 큰 사진은 위아래가 배경으로 옅게 녹아들게 한다.
+   덮개를 올리는 대신 이미지 자체를 마스크로 깎아 어떤 배경에서도 자연스럽다. */
+.ds-hero img,
+.ds-full,
+.ds-item.wide .ds-head img,
+.wb-item.top img {
+  -webkit-mask-image: linear-gradient(
     to bottom,
-    rgba(var(--bg-rgb), 1) 0%,
-    rgba(var(--bg-rgb), 0.45) 38%,
-    rgba(var(--bg-rgb), 0) 100%
+    transparent 0%,
+    #000 11%,
+    #000 89%,
+    transparent 100%
   );
-}
-
-.ds-hero::after {
-  bottom: 0;
-  background: linear-gradient(
-    to top,
-    rgba(var(--bg-rgb), 1) 0%,
-    rgba(var(--bg-rgb), 0.45) 38%,
-    rgba(var(--bg-rgb), 0) 100%
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 11%,
+    #000 89%,
+    transparent 100%
   );
 }
 
