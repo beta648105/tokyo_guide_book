@@ -666,9 +666,70 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   margin-bottom: 18px;
 }
 
+/* 맨 위 큰 사진: 위아래를 배경색으로 아주 옅게 흐려 자연스럽게 잇는다 */
+.ds-hero {
+  position: relative;
+  margin: 0 0 18px;
+  line-height: 0;
+}
+
+.ds-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ds-hero::before,
+.ds-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 15%;
+  pointer-events: none;
+}
+
+.ds-hero::before {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--bg-rgb), 1) 0%,
+    rgba(var(--bg-rgb), 0.45) 38%,
+    rgba(var(--bg-rgb), 0) 100%
+  );
+}
+
+.ds-hero::after {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(var(--bg-rgb), 1) 0%,
+    rgba(var(--bg-rgb), 0.45) 38%,
+    rgba(var(--bg-rgb), 0) 100%
+  );
+}
+
 /* 사진 + 시설 이름 */
 .ds-item {
   margin-bottom: 26px;
+}
+
+/* 사진을 가로로 꽉 채우고 이름을 아래에 */
+.ds-item.wide .ds-head {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding-right: 0;
+}
+
+.ds-item.wide .ds-head img {
+  width: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+}
+
+.ds-item.wide .ds-name {
+  padding: 0 var(--text-pad);
 }
 
 .ds-head {

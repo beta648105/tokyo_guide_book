@@ -89,6 +89,7 @@ const DISNEY = {
         {
           type: "item",
           image: "images/disney/disneysea_food.jpg",
+          wide: true,          // 사진을 가로로 꽉, 이름은 아래에
           name: "놀이기구 사이에 즐기는 디즈니 간식",
           text: "디즈니씨에서는 팝콘과 다양한 간식, 테마가 있는 식사를 즐길 수 있다. 먹거리를 고를 때는 메뉴명뿐 아니라 가격과 판매 장소를 함께 확인하면 실제 방문할 때 유용하다.",
         },
@@ -113,6 +114,7 @@ const DISNEY = {
         {
           type: "item",
           image: "images/disney/disneysea_shop.jpg",
+          wide: true,          // 사진을 가로로 꽉, 이름은 아래에
           name: "여행의 기억을 남기는 기념품",
           text: "캐릭터 인형과 문구류, 의류 등 다양한 상품을 판매한다. 쇼핑 시간이 부족할 수 있으므로 미리 사고 싶은 상품과 예산을 정해두면 편하다. 상품마다 판매 장소가 다를 수 있으니 공식 상품점 안내를 확인한다.",
         },

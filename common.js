@@ -325,7 +325,7 @@ function buildBlock(block) {
     // 사진 + 시설 이름(제목 폰트), 그 아래 설명
     case "item": {
       const wrap = document.createElement("div");
-      wrap.className = "ds-item reveal";
+      wrap.className = block.wide ? "ds-item wide reveal" : "ds-item reveal";
 
       const head = document.createElement("div");
       head.className = "ds-head";
@@ -488,12 +488,15 @@ function renderShowcase(data) {
   }
 
   if (data.hero) {
+    // 위아래가 배경으로 자연스럽게 녹아들도록 감싸준다
+    const frame = document.createElement("figure");
+    frame.className = "ds-hero";
     const hero = document.createElement("img");
-    hero.className = "ds-full";
     hero.src = data.hero;
     hero.alt = "";
     hero.decoding = "async";
-    parts.push(hero);
+    frame.append(hero);
+    parts.push(frame);
   }
 
   if (data.intro && data.intro.length) {
