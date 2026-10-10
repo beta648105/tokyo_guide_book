@@ -5,7 +5,7 @@
  * 내용을 크게 바꿨을 땐 CACHE 버전을 올린다.
  */
 
-const CACHE = "tokyo-guide-v38";
+const CACHE = "tokyo-guide-v39";
 
 const PRECACHE = [
   "./",
@@ -22,6 +22,7 @@ const PRECACHE = [
   "area.js",
   "akihabara.js",
   "warnerbros.js",
+  "disney.js",
   "manifest.webmanifest",
   "images/home/tokyo.png",
   "images/timeline/timeline.jpg",

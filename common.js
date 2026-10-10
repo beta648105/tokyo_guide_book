@@ -319,6 +319,160 @@ function initReveal(root) {
   for (const el of targets) observer.observe(el);
 }
 
+/** 블록 하나를 만든다. (섹션 안에 들어가는 여러 모양들) */
+function buildBlock(block) {
+  switch (block.type) {
+    // 사진 + 시설 이름(제목 폰트), 그 아래 설명
+    case "item": {
+      const wrap = document.createElement("div");
+      wrap.className = "ds-item reveal";
+
+      const head = document.createElement("div");
+      head.className = "ds-head";
+      const img = document.createElement("img");
+      img.src = block.image;
+      img.alt = block.name || "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      const name = document.createElement("h3");
+      name.className = "ds-name";
+      name.textContent = block.name;
+      head.append(img, name);
+      wrap.append(head);
+
+      if (block.text) {
+        const p = document.createElement("p");
+        p.className = "ds-text";
+        p.textContent = block.text;
+        wrap.append(p);
+      }
+      if (block.tip) {
+        const tip = document.createElement("p");
+        tip.className = "ds-tip";
+        fillLabeled(tip, block.tip);
+        wrap.append(tip);
+      }
+      return wrap;
+    }
+
+    case "image": {
+      const img = document.createElement("img");
+      img.className = "ds-full reveal";
+      img.src = block.src;
+      img.alt = "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      return img;
+    }
+
+    case "lead": {
+      const p = document.createElement("p");
+      p.className = "ds-lead reveal";
+      p.textContent = block.text;
+      return p;
+    }
+
+    case "para": {
+      const p = document.createElement("p");
+      p.className = "ds-text reveal";
+      p.textContent = block.text;
+      return p;
+    }
+
+    // 1·2·3… 작은 회색 목록
+    case "steps": {
+      const ol = document.createElement("ol");
+      ol.className = "small-list reveal";
+      for (const text of block.items) {
+        const li = document.createElement("li");
+        li.textContent = text;
+        ol.append(li);
+      }
+      return ol;
+    }
+
+    // '조사할 내용' 같은 작은 회색 목록
+    case "todo": {
+      const wrap = document.createElement("div");
+      wrap.className = "reveal";
+      if (block.title) {
+        const h = document.createElement("p");
+        h.className = "small-list-title";
+        h.textContent = block.title;
+        wrap.append(h);
+      }
+      const ul = document.createElement("ul");
+      ul.className = "small-list";
+      for (const text of block.items) {
+        const li = document.createElement("li");
+        li.textContent = text;
+        ul.append(li);
+      }
+      wrap.append(ul);
+      return wrap;
+    }
+
+    case "checklist": {
+      const ul = document.createElement("ul");
+      ul.className = "ds-checklist reveal";
+      for (const text of block.items) {
+        const li = document.createElement("li");
+        li.textContent = text;
+        ul.append(li);
+      }
+      return ul;
+    }
+
+    case "table": {
+      const table = document.createElement("table");
+      table.className = "floors reveal";
+      const tbody = document.createElement("tbody");
+      for (const row of block.rows) {
+        const tr = document.createElement("tr");
+        row.forEach((cell, i) => {
+          const td = document.createElement("td");
+          td.textContent = cell;
+          if (i === 0) td.className = "floor-no";
+          tr.append(td);
+        });
+        tbody.append(tr);
+      }
+      table.append(tbody);
+      return table;
+    }
+
+    case "note": {
+      const p = document.createElement("p");
+      p.className = "ds-note reveal";
+      p.textContent = block.text;
+      return p;
+    }
+
+    case "link": {
+      const p = document.createElement("p");
+      p.className = "ds-link reveal";
+      const a = document.createElement("a");
+      a.href = block.href;
+      a.textContent = block.label;
+      a.target = "_blank";
+      a.rel = "noopener";
+      p.append(a);
+      return p;
+    }
+
+    // ' ' 안에 있던 문구 (따옴표 없이 회색 기울임)
+    case "quote": {
+      const p = document.createElement("p");
+      p.className = "sec-desc reveal";
+      p.textContent = block.text;
+      return p;
+    }
+
+    default:
+      return document.createTextNode("");
+  }
+}
+
 /** 섹션형 본문을 그린다. */
 function renderShowcase(data) {
   const main = document.getElementById("view-main");
@@ -329,8 +483,17 @@ function renderShowcase(data) {
   if (data.tagline) {
     const tag = document.createElement("p");
     tag.className = "spot-tagline";
-    tag.textContent = `‘${data.tagline}’`;
+    tag.textContent = data.tagline;
     parts.push(tag);
+  }
+
+  if (data.hero) {
+    const hero = document.createElement("img");
+    hero.className = "ds-full";
+    hero.src = data.hero;
+    hero.alt = "";
+    hero.decoding = "async";
+    parts.push(hero);
   }
 
   if (data.intro && data.intro.length) {
@@ -365,7 +528,12 @@ function renderShowcase(data) {
       sec.append(desc);
     }
 
-    for (const item of section.items) sec.append(buildShowcaseItem(item));
+    if (section.items) {
+      for (const item of section.items) sec.append(buildShowcaseItem(item));
+    }
+    if (section.blocks) {
+      for (const block of section.blocks) sec.append(buildBlock(block));
+    }
     parts.push(sec);
   }
 
