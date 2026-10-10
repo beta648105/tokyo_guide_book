@@ -329,6 +329,7 @@ function buildBlock(block) {
       if (block.wide) kinds.push("wide");
       if (block.quiet) kinds.push("quiet");
       if (block.italicName) kinds.push("italic-name");
+      if (block.plainName) kinds.push("plain-name");
       wrap.className = kinds.join(" ");
 
       const head = document.createElement("div");
@@ -447,7 +448,7 @@ function buildBlock(block) {
 
     case "label": {
       const p = document.createElement("p");
-      p.className = "small-list-title reveal";
+      p.className = "ds-sublabel reveal";
       p.textContent = block.text;
       return p;
     }
@@ -637,6 +638,34 @@ function initPageTransitions() {
   });
 }
 
+/* ── 위쪽 버튼 ──
+   아래로 내릴 때는 숨고, 위로 올릴 때 다시 내려온다.
+   (버튼을 body 로 옮겨야 페이지 전환 애니메이션의 transform 에
+    휘둘리지 않고 화면에 고정된다) */
+
+function initFloatingNav() {
+  const buttons = [...document.querySelectorAll(".home-btn")];
+  for (const btn of buttons) document.body.append(btn);
+
+  let last = Math.max(0, window.scrollY);
+
+  const update = () => {
+    const y = Math.max(0, window.scrollY);
+    const moved = y - last;
+    if (y < 60) {
+      document.body.classList.remove("nav-hidden");          // 맨 위에서는 항상
+    } else if (moved > 6) {
+      document.body.classList.add("nav-hidden");             // 내리는 중
+    } else if (moved < -6) {
+      document.body.classList.remove("nav-hidden");          // 올리는 중
+    }
+    if (Math.abs(moved) > 6 || y < 60) last = y;
+  };
+
+  // 클래스만 바꾸는 가벼운 처리라 그대로 받아도 된다
+  window.addEventListener("scroll", update, { passive: true });
+}
+
 /* ── 오른쪽 상단 메뉴 ──
    가로선 3개 버튼을 누르면 오른쪽에서 패널이 절반 폭만큼 밀려 나온다.
    항목은 아직 누르는 동작이 없다. */
@@ -764,7 +793,7 @@ function initMenu() {
   const scrim = document.createElement("div");
   scrim.className = "scrim";
   const drawer = buildDrawer();
-  app.append(btn, back);
+  document.body.append(btn, back);
   // 패널과 배경은 body 에 붙인다. .app 은 페이지 전환 때 transform 이 걸리는데
   // transform 이 걸린 조상 안에서는 position: fixed 가 그 조상 기준으로 바뀌어
   // 패널이 잠깐 화면 안으로 튀어 들어온다.

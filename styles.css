@@ -64,7 +64,7 @@ body {
 
 /* ── 왼쪽 위 홈 버튼 ── */
 .home-btn {
-  position: absolute;
+  position: fixed;
   z-index: 3;
   top: calc(env(safe-area-inset-top) + 12px);
   left: 16px;
@@ -104,7 +104,7 @@ body {
 /* ── 오른쪽 상단 버튼 (메뉴 / 되돌아가기) ── */
 .menu-btn,
 .back-btn {
-  position: absolute;
+  position: fixed;
   z-index: 25;
   top: calc(env(safe-area-inset-top) + 12px);
   right: 14px;
@@ -145,6 +145,16 @@ body {
 
 .menu-btn:active,
 .back-btn:active { transform: scale(0.95); }
+
+/* 아래로 내릴 때는 위로 숨고, 위로 올리면 다시 내려온다 */
+body.nav-hidden .home-btn,
+body.nav-hidden .menu-btn,
+body.nav-hidden .back-btn {
+  transform: translateY(-160%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s var(--ease-out), opacity 0.25s var(--ease-out);
+}
 
 /* 되돌아가기 아이콘은 시계 방향으로 90도 (왼쪽을 가리키게) */
 .back-btn svg { transform: rotate(90deg); }
@@ -721,7 +731,18 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 }
 
 .ds-item.wide .ds-name {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
   padding: 0 var(--text-pad);
+}
+
+/* 섹션 제목과 같은 모양의 회색 막대 */
+.ds-item.wide .ds-name::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  background: #bcc2cc;
 }
 
 .ds-head {
@@ -830,6 +851,25 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   font-style: italic;
 }
 
+/* 이름을 제목 폰트 대신 본문 폰트 검정으로 */
+.ds-item.plain-name .ds-name {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* 소제목 (주요 볼거리) */
+.ds-sublabel {
+  margin: 22px 0 10px;
+  padding: 0 var(--text-pad);
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text);
+}
+
 /* 작고 회색인 목록 (1·2·3…, 조사할 내용) */
 .small-list-title {
   margin: 18px 0 6px;
@@ -902,7 +942,9 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 
 @media (min-width: 700px) {
   .ds-notes p { font-size: 15px; }
+  .ds-sublabel { font-size: 19px; }
   .ds-item.quiet .ds-name { font-size: 19px; }
+  .ds-item.plain-name .ds-name { font-size: 19px; }
   .ds-item.quiet .ds-text { font-size: 15px; }
   .ds-name { font-size: 26px; }
   .ds-text { font-size: 17px; }

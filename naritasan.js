@@ -76,9 +76,7 @@ const NARITASAN = {
         },
         {
           type: "item",
-          wide: true,
-          quiet: true,            // 회색 작은 글씨
-          italicName: true,       // 이름은 기울임까지
+          plainName: true,        // 이름을 본문 폰트 검정으로
           image: "images/naritasan/pagoda_carving.png",
           name: "정교한 조각 장식",
           lines: [

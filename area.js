@@ -9,3 +9,4 @@ initViews();
 registerServiceWorker();
 initPageTransitions();
 initMenu();
+initFloatingNav();
