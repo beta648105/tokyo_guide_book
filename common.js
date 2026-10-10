@@ -325,7 +325,11 @@ function buildBlock(block) {
     // 사진 + 시설 이름(제목 폰트), 그 아래 설명
     case "item": {
       const wrap = document.createElement("div");
-      wrap.className = block.wide ? "ds-item wide reveal" : "ds-item reveal";
+      const kinds = ["ds-item", "reveal"];
+      if (block.wide) kinds.push("wide");
+      if (block.quiet) kinds.push("quiet");
+      if (block.italicName) kinds.push("italic-name");
+      wrap.className = kinds.join(" ");
 
       const head = document.createElement("div");
       head.className = "ds-head";
@@ -340,10 +344,10 @@ function buildBlock(block) {
       head.append(img, name);
       wrap.append(head);
 
-      if (block.text) {
+      for (const text of block.lines || (block.text ? [block.text] : [])) {
         const p = document.createElement("p");
         p.className = "ds-text";
-        p.textContent = block.text;
+        p.textContent = text;
         wrap.append(p);
       }
       if (block.tip) {
@@ -441,6 +445,36 @@ function buildBlock(block) {
       return table;
     }
 
+    case "label": {
+      const p = document.createElement("p");
+      p.className = "small-list-title reveal";
+      p.textContent = block.text;
+      return p;
+    }
+
+    // 여러 줄짜리 회색 작은 글씨. 줄 안의 주소는 링크로 바꾼다.
+    case "notes": {
+      const wrap = document.createElement("div");
+      wrap.className = "ds-notes reveal";
+      for (const text of block.items) {
+        const p = document.createElement("p");
+        const at = text.search(/https?:\/\//);
+        if (at >= 0) {
+          const url = text.slice(at).trim();
+          const a = document.createElement("a");
+          a.href = url;
+          a.textContent = url;
+          a.target = "_blank";
+          a.rel = "noopener";
+          p.append(text.slice(0, at), a);
+        } else {
+          p.textContent = text;
+        }
+        wrap.append(p);
+      }
+      return wrap;
+    }
+
     case "note": {
       const p = document.createElement("p");
       p.className = "ds-note reveal";
@@ -514,15 +548,17 @@ function renderShowcase(data) {
     const sec = document.createElement("section");
     sec.className = "wb-section";
 
-    const head = document.createElement("div");
-    head.className = "sec-head reveal";
-    const bar = document.createElement("span");
-    bar.className = "sec-bar";
-    const title = document.createElement("h2");
-    title.className = "sec-title";
-    title.textContent = section.title;
-    head.append(bar, title);
-    sec.append(head);
+    if (section.title) {
+      const head = document.createElement("div");
+      head.className = "sec-head reveal";
+      const bar = document.createElement("span");
+      bar.className = "sec-bar";
+      const title = document.createElement("h2");
+      title.className = "sec-title";
+      title.textContent = section.title;
+      head.append(bar, title);
+      sec.append(head);
+    }
 
     if (section.desc) {
       const desc = document.createElement("p");
