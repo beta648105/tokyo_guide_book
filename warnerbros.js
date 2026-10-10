@@ -15,6 +15,11 @@ const WARNERBROS = {
       desc: "도쿄에서만 걸어 들어갈 수 있는 마법부, 일본에서는 여기서만 볼 수 있는 호그와트 급행열차와 대연회장.",
       items: [
         {
+          image: "images/warnerbros/warnerbros10.jpg",
+          side: "top",
+          text: "영화 제작진이 원래 쓰던 방식으로 손수 만든 세트가 눈앞에 펼쳐지는 곳으로, 도쿄에서만 볼 수 있는 마법부와 그레이트 위저딩 익스프레스까지 전부 걸어서 둘러볼 수 있다.",
+        },
+        {
           image: "images/warnerbros/warnerbros3.jpg",
           side: "left",
           text: "마법부: 영화 속 마법부를 실제 크기로 재현한 세트로, 전 세계 스튜디오 투어 중 도쿄에서만 볼 수 있다. '마법이 곧 힘이다' 조각상과 함께 높이가 3m 넘는 거대한 벽난로 속 나타나는 플루 가루가 조화를 이룬다.",
@@ -30,6 +35,11 @@ const WARNERBROS = {
       title: "체험",
       desc: "보기만 하는 곳이 아니다. 빗자루를 타고, 초상화가 되고, 주문을 외워봐라.",
       items: [
+        {
+          image: "images/warnerbros/warnerbros11.jpg",
+          side: "top",
+          text: "보기만 하는 것이 아니라 그린스크린 앞에서 빗자루를 타고, 움직이는 초상화가 되고, 찍은 사진과 영상은 QR코드로 스마트폰에 내려받을 수 있다.",
+        },
         {
           image: "images/warnerbros/warnerbros5.jpg",
           side: "left",
