@@ -4,6 +4,7 @@
  */
 
 renderTimeline();
+renderJapanese();
 renderGuide();
 initViews();
 registerServiceWorker();

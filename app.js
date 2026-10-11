@@ -53,6 +53,7 @@ function renderGrid() {
 
 renderGrid();
 renderTimeline();
+renderJapanese();
 renderGuide();
 initViews();
 registerServiceWorker();

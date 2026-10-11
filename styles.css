@@ -515,6 +515,70 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   }
 }
 
+/* ── 일본어 회화 ──
+   쓰임새별로 묶고, 한 줄에 일본어 · 발음 · 뜻을 같이 보여준다 */
+#view-japanese {
+  --text-pad: 18px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.jp-section {
+  margin: 0 0 30px;
+}
+
+.jp-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jp-item {
+  padding: 13px var(--text-pad);
+  border-bottom: 1px solid #d3d7de;
+}
+
+.jp-section .jp-item:last-child {
+  border-bottom: 0;
+}
+
+.jp-ja {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.3px;
+  color: var(--text);
+}
+
+.jp-read {
+  margin: 3px 0 0;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+}
+
+.jp-ko {
+  margin: 6px 0 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+@media (min-width: 700px) {
+  #view-japanese { --text-pad: 26px; }
+  .jp-ja { font-size: 22px; }
+  .jp-read { font-size: 15px; }
+  .jp-ko { font-size: 17px; }
+}
+
 /* ── 홈 화면 추가 안내 ──
    기종(아이폰 / 갤럭시)별로 나눠서 보여준다 */
 .guide-group {

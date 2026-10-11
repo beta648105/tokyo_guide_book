@@ -77,6 +77,110 @@ const GUIDE_GROUPS = [
   },
 ];
 
+/* ── 일본어 회화 ──
+   내용 출처: text/japanese.txt (쓰임새별로 나눴다) */
+
+const JAPANESE_GROUPS = [
+  {
+    title: "기본 인사",
+    phrases: [
+      { ja: "すみません", read: "스미마센", ko: "저기요 / 실례합니다 / 죄송합니다" },
+      { ja: "ありがとうございます", read: "아리가토 고자이마스", ko: "감사합니다" },
+      { ja: "大丈夫です", read: "다이조부데스", ko: "괜찮습니다" },
+    ],
+  },
+  {
+    title: "가게에서",
+    phrases: [
+      { ja: "これはいくらですか", read: "고레와 이쿠라데스카", ko: "이거 얼마예요?" },
+      { ja: "これをください", read: "고레오 쿠다사이", ko: "이거 주세요" },
+      { ja: "袋はいりません", read: "후쿠로와 이리마센", ko: "봉투는 필요 없어요" },
+    ],
+  },
+  {
+    title: "식당에서",
+    phrases: [
+      { ja: "いただきます", read: "이타다키마스", ko: "잘 먹겠습니다" },
+      { ja: "お会計をお願いします", read: "오카이케이오 오네가이시마스", ko: "계산해 주세요" },
+    ],
+  },
+  {
+    title: "길 찾을 때",
+    phrases: [
+      { ja: "トイレはどこですか", read: "토이레와 도코데스카", ko: "화장실이 어디예요?" },
+      { ja: "~はどこですか", read: "~와 도코데스카", ko: "~은 어디예요?" },
+      { ja: "道に迷いました", read: "미치니 마요이 마시타", ko: "길을 잃었어요" },
+    ],
+  },
+  {
+    title: "구경할 때",
+    phrases: [
+      { ja: "写真を撮ってもいいですか", read: "샤신오 톳테모 이이데스카", ko: "사진 찍어도 되나요?" },
+      { ja: "待ち時間はどれくらいですか", read: "마치지칸와 도레쿠라이 데스카", ko: "대기 시간이 얼마나 되나요?" },
+      { ja: "これは何ですか", read: "고레와 난데스카", ko: "이건 뭐예요?" },
+    ],
+  },
+  {
+    title: "도움이 필요할 때",
+    phrases: [
+      { ja: "英語は話せますか", read: "에이고와 하나세마스카", ko: "영어 가능하세요?" },
+      { ja: "Wi-Fiは使えますか", read: "와이파이와 츠카에마스카", ko: "와이파이 쓸 수 있나요?" },
+    ],
+  },
+];
+
+/** 일본어 회화를 그린다. */
+function renderJapanese() {
+  const section = document.getElementById("view-japanese");
+  if (!section) return;
+
+  const parts = [];
+
+  for (const group of JAPANESE_GROUPS) {
+    const sec = document.createElement("section");
+    sec.className = "jp-section";
+
+    const head = document.createElement("div");
+    head.className = "sec-head";
+    const bar = document.createElement("span");
+    bar.className = "sec-bar";
+    const title = document.createElement("h2");
+    title.className = "sec-title";
+    title.textContent = group.title;
+    head.append(bar, title);
+    sec.append(head);
+
+    const list = document.createElement("ul");
+    list.className = "jp-list";
+
+    for (const phrase of group.phrases) {
+      const item = document.createElement("li");
+      item.className = "jp-item";
+
+      const ja = document.createElement("p");
+      ja.className = "jp-ja";
+      ja.lang = "ja";
+      ja.textContent = phrase.ja;
+
+      const read = document.createElement("p");
+      read.className = "jp-read";
+      read.textContent = phrase.read;
+
+      const ko = document.createElement("p");
+      ko.className = "jp-ko";
+      ko.textContent = phrase.ko;
+
+      item.append(ja, read, ko);
+      list.append(item);
+    }
+
+    sec.append(list);
+    parts.push(sec);
+  }
+
+  section.replaceChildren(...parts);
+}
+
 /** 일정표를 그린다. */
 function renderTimeline() {
   const section = document.getElementById("view-schedule");
@@ -756,6 +860,7 @@ function initFloatingNav() {
 
 const MENU_ITEMS = [
   { label: "일정표", view: "schedule" },
+  { label: "일본어 회화", view: "japanese" },
   { label: "홈 화면 추가", view: "install" },
 ];
 
@@ -763,7 +868,7 @@ const MENU_ITEMS = [
    어느 페이지에서든 상단 사진은 그대로 두고 그 아래만 바꾼다.
    시부야에서 열면 시부야 사진이, 홈에서 열면 도쿄 사진이 그대로 남는다. */
 
-const VIEWS = ["main", "schedule", "install"];
+const VIEWS = ["main", "schedule", "japanese", "install"];
 
 /** 메뉴로 연 화면에서 사진 아래에 표시할 제목 */
 const VIEW_TITLES = Object.fromEntries(
