@@ -351,6 +351,17 @@ function buildBlock(block) {
         p.textContent = text;
         wrap.append(p);
       }
+      // '• 역사: …' 처럼 머리말이 붙은 줄은 목록으로, 머리말은 굵게
+      if (block.bullets && block.bullets.length) {
+        const ul = document.createElement("ul");
+        ul.className = "ds-bullets";
+        for (const text of block.bullets) {
+          const li = document.createElement("li");
+          fillLabeled(li, text);
+          ul.append(li);
+        }
+        wrap.append(ul);
+      }
       if (block.tip) {
         const tip = document.createElement("p");
         tip.className = "ds-tip";
@@ -451,6 +462,36 @@ function buildBlock(block) {
       p.className = "ds-sublabel reveal";
       p.textContent = block.text;
       return p;
+    }
+
+    // 화살표 마크를 누르면 아래 내용이 펼쳐진다 (아키하바라와 같은 방식)
+    case "fold": {
+      const wrap = document.createElement("div");
+      wrap.className = "ds-fold";
+
+      const bar = document.createElement("div");
+      bar.className = "ds-fold-bar";
+      const toggle = buildToggle();
+      bar.append(toggle);
+
+      const body = document.createElement("div");
+      body.className = "ds-fold-body";
+      const inner = document.createElement("div");
+      inner.className = "ds-fold-inner";
+      for (const child of block.blocks) inner.append(buildBlock(child));
+      // 접혀 있는 동안에는 화면에 들어온 적이 없으므로 등장 효과는 쓰지 않는다
+      for (const el of inner.querySelectorAll(".reveal")) el.classList.remove("reveal");
+      body.append(inner);
+
+      wrap.append(bar, body);
+
+      toggle.addEventListener("click", () => {
+        const open = wrap.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", String(open));
+        toggle.setAttribute("aria-label", open ? "접기" : "자세히 보기");
+      });
+
+      return wrap;
     }
 
     // 여러 줄짜리 회색 작은 글씨. 줄 안의 주소는 링크로 바꾼다.

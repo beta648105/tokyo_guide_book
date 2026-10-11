@@ -870,6 +870,52 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   color: var(--text);
 }
 
+/* 머리말이 굵게 붙는 점 목록 */
+.ds-bullets {
+  margin: 2px 0 10px;
+  padding: 0 var(--text-pad) 0 calc(var(--text-pad) + 17px);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.ds-bullets li { margin: 0 0 5px; }
+.ds-bullets b { font-weight: 700; }
+
+/* 화살표 마크로 펼치는 영역 */
+.ds-fold {
+  margin: -8px 0 26px;
+}
+
+.ds-fold-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 var(--text-pad);
+}
+
+.ds-fold-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.34s var(--ease-out);
+}
+
+.ds-fold.open .ds-fold-body {
+  grid-template-rows: 1fr;
+}
+
+.ds-fold-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* 펼쳐지면 화살표가 아래를 가리킨다 */
+.ds-fold.open .spot-toggle { transform: rotate(90deg); }
+.ds-fold.open .spot-toggle:active { transform: rotate(90deg) scale(0.92); }
+
 /* 작고 회색인 목록 (1·2·3…, 조사할 내용) */
 .small-list-title {
   margin: 18px 0 6px;
@@ -951,6 +997,7 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   .ds-tip { font-size: 15px; }
   .ds-lead { font-size: 18px; }
   .small-list, .small-list-title { font-size: 15px; }
+  .ds-bullets { font-size: 16.5px; }
   .ds-checklist { font-size: 17px; }
   .ds-note { font-size: 14.5px; }
   .ds-link { font-size: 15px; }
