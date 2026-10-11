@@ -371,6 +371,21 @@ function buildBlock(block) {
       return wrap;
     }
 
+    // 사진 여러 장을 가로로 두 개씩 (플로어 가이드)
+    case "grid": {
+      const wrap = document.createElement("div");
+      wrap.className = "ds-grid reveal";
+      for (const src of block.images) {
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "";
+        img.loading = "lazy";
+        img.decoding = "async";
+        wrap.append(img);
+      }
+      return wrap;
+    }
+
     case "image": {
       const img = document.createElement("img");
       img.className = "ds-full reveal";

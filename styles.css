@@ -870,6 +870,24 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   color: var(--text);
 }
 
+/* 사진을 가로로 두 개씩 (플로어 가이드) */
+.ds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 10px;
+  padding: 0 var(--text-pad);
+  margin: 0 0 20px;
+}
+
+.ds-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
 /* 머리말이 굵게 붙는 점 목록 */
 .ds-bullets {
   margin: 2px 0 10px;
