@@ -36,18 +36,21 @@ const DIVERSITY = {
         },
         {
           type: "item",
+          wide: true,
           image: "images/diceverity/divercity3.png",
           name: "공식 홈페이지",
           text: "공식 홈페이지에서는 매장 안내, 푸드코트 안내, 각 층의 지도 등의 정보를 확인할 수 있다. 공식 홈페이지에 들어가서 매장 정보를 누르면 어떤 상품을 파는지, 어떤 컨셉의 매장인지를 확인하고 원하는 매장을 찾아볼 수 있다.",
         },
         {
           type: "item",
+          wide: true,
           image: "images/diceverity/divercity2.png",
           name: "푸드코트",
           text: "2층에는 여러 가게가 모인 푸드코트가 있다. 일본의 푸드코트는 실제로 운영하는 가게에서 나와서 하기 때문에 음식의 퀄리티와 맛이 굉장히 높고, 음식의 종류도 많이 있다. 배가 고프다면 식사를 하거나 간식을 먹기에 적합하다.",
         },
         {
           type: "item",
+          wide: true,
           image: "images/diceverity/divercity4.png",
           name: "패션",
           text: "대표적인 의류 상점으로는 GU와 ZARA가 있다. 다이버시티 건물 4층에 위치하며, 이 두 상점은 한 곳에 있어서 두 곳을 편하게 즐겨볼 수 있다. 세일을 자주 하므로 의상 구매를 원한다면 4층에 두 상점에 들려보는 것을 추천한다.",

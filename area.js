@@ -10,3 +10,4 @@ registerServiceWorker();
 initPageTransitions();
 initMenu();
 initFloatingNav();
+initLightbox();

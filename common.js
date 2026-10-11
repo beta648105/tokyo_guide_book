@@ -889,3 +889,197 @@ function initMenu() {
     if (e.key === "Escape") setOpen(false);
   });
 }
+
+/* ── 사진 크게 보기 ──
+   플로어 가이드처럼 자세히 봐야 하는 사진을 누르면 전체 화면으로 열린다.
+   손가락 두 개로 확대·축소, 확대한 뒤에는 끌어서 이동, 두 번 두드리면 확대/원래대로.
+   확대하지 않은 상태에서 아래로 끌어내리거나 배경을 누르면 닫힌다. */
+function initLightbox() {
+  if (document.querySelector(".lightbox")) return;
+
+  const box = document.createElement("div");
+  box.className = "lightbox";
+  box.hidden = true;
+
+  const img = document.createElement("img");
+  img.className = "lightbox-img";
+  img.alt = "";
+  img.decoding = "async";
+
+  const close = document.createElement("button");
+  close.className = "lightbox-close";
+  close.type = "button";
+  close.setAttribute("aria-label", "닫기");
+  close.innerHTML =
+    '<svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path d="M6 6 18 18" /><path d="M18 6 6 18" /></svg>';
+
+  box.append(img, close);
+  document.body.append(box);
+
+  const MAX = 6;
+  let scale = 1;
+  let tx = 0;
+  let ty = 0;
+
+  const pointers = new Map();
+  let startScale = 1;
+  let startDist = 0;
+  let startMid = { x: 0, y: 0 };
+  let startTx = 0;
+  let startTy = 0;
+  let downAt = { x: 0, y: 0 };
+  let lastTapAt = 0;
+
+  const apply = () => {
+    img.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  };
+
+  // 확대한 만큼만 움직일 수 있게 가둔다
+  const clampPan = () => {
+    const mx = Math.max(0, (img.offsetWidth * scale - window.innerWidth) / 2);
+    const my = Math.max(0, (img.offsetHeight * scale - window.innerHeight) / 2);
+    tx = Math.min(mx, Math.max(-mx, tx));
+    ty = Math.min(my, Math.max(-my, ty));
+  };
+
+  // 화면의 한 점을 기준으로 배율을 바꾼다 (그 점에 있던 부분이 제자리에 남는다)
+  const zoomAt = (next, px, py) => {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const ux = (px - cx - tx) / scale;
+    const uy = (py - cy - ty) / scale;
+    scale = Math.min(MAX, Math.max(1, next));
+    tx = px - cx - ux * scale;
+    ty = py - cy - uy * scale;
+    clampPan();
+    apply();
+  };
+
+  const open = (src) => {
+    img.src = src;
+    scale = 1;
+    tx = 0;
+    ty = 0;
+    img.style.transition = "none";
+    apply();
+    box.hidden = false;
+    close.focus({ preventScroll: true });
+  };
+
+  const hide = () => {
+    box.hidden = true;
+    img.removeAttribute("src");
+    pointers.clear();
+  };
+
+  close.addEventListener("click", hide);
+
+  box.addEventListener("pointerdown", (event) => {
+    if (event.target === close || close.contains(event.target)) return;
+    event.preventDefault();
+    box.setPointerCapture(event.pointerId);
+    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    img.style.transition = "none";
+    startTx = tx;
+    startTy = ty;
+
+    if (pointers.size === 1) {
+      downAt = { x: event.clientX, y: event.clientY };
+      startMid = { x: event.clientX, y: event.clientY };
+    } else if (pointers.size === 2) {
+      const [a, b] = [...pointers.values()];
+      startDist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+      startScale = scale;
+      startMid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    }
+  });
+
+  box.addEventListener("pointermove", (event) => {
+    if (!pointers.has(event.pointerId)) return;
+    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    if (pointers.size >= 2) {
+      const [a, b] = [...pointers.values()];
+      const dist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+      const next = Math.min(MAX, Math.max(1, startScale * (dist / startDist)));
+      const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      const ux = (startMid.x - cx - startTx) / startScale;
+      const uy = (startMid.y - cy - startTy) / startScale;
+      scale = next;
+      tx = mid.x - cx - ux * scale;
+      ty = mid.y - cy - uy * scale;
+      clampPan();
+      apply();
+      return;
+    }
+
+    tx = startTx + (event.clientX - startMid.x);
+    ty = startTy + (event.clientY - startMid.y);
+    if (scale > 1.01) clampPan();
+    apply();
+  });
+
+  const release = (event) => {
+    if (!pointers.has(event.pointerId)) return;
+    pointers.delete(event.pointerId);
+
+    // 두 손가락 중 하나만 떼면 남은 손가락으로 이어서 움직인다
+    if (pointers.size > 0) {
+      const [a] = [...pointers.values()];
+      startMid = { x: a.x, y: a.y };
+      startTx = tx;
+      startTy = ty;
+      return;
+    }
+
+    img.style.transition = "transform 0.25s var(--ease-out)";
+    const moved = Math.hypot(event.clientX - downAt.x, event.clientY - downAt.y);
+
+    if (moved < 10) {
+      const now = Date.now();
+      if (now - lastTapAt < 300) {
+        lastTapAt = 0;
+        zoomAt(scale > 1.01 ? 1 : 2.5, event.clientX, event.clientY);
+        if (scale <= 1.01) { tx = 0; ty = 0; apply(); }
+      } else {
+        lastTapAt = now;
+        // 사진 바깥(배경)을 누르면 닫는다
+        if (event.target !== img) hide();
+      }
+      return;
+    }
+
+    if (scale <= 1.01) {
+      if (Math.abs(ty) > 90) { hide(); return; }
+      tx = 0;
+      ty = 0;
+      apply();
+      return;
+    }
+    clampPan();
+    apply();
+  };
+
+  box.addEventListener("pointerup", release);
+  box.addEventListener("pointercancel", release);
+
+  box.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    img.style.transition = "none";
+    zoomAt(scale * Math.exp(-event.deltaY / 400), event.clientX, event.clientY);
+  }, { passive: false });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !box.hidden) hide();
+  });
+
+  // 플로어 가이드처럼 크게 볼 수 있는 사진
+  document.addEventListener("click", (event) => {
+    const target = event.target.closest?.(".ds-grid img, img.zoomable");
+    if (!target) return;
+    open(target.currentSrc || target.src);
+  });
+}
