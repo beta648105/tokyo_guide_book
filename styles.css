@@ -516,11 +516,47 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 }
 
 /* ── 홈 화면 추가 안내 ──
-   가운데 정렬, 폭은 화면의 2/3 정도 */
-.guide {
+   기종(아이폰 / 갤럭시)별로 나눠서 보여준다 */
+.guide-group {
   width: 66%;
   max-width: 560px;
   margin: 0 auto;
+}
+
+.guide-group + .guide-group {
+  margin-top: 52px;
+}
+
+/* 가운데 제목 */
+.guide-title {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-title);
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+/* 제목 아래 가로로 긴 회색 막대 */
+.guide-title::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 7px;
+  margin: 12px 0 30px;
+  background: #bcc2cc;
+}
+
+@media (min-width: 700px) {
+  .guide-title { font-size: 34px; }
+  .guide-title::after { height: 9px; margin: 14px 0 36px; }
+}
+
+/* 단계 사진들 (폭은 바깥 .guide-group 이 정한다) */
+.guide {
+  width: 100%;
+  margin: 0;
   padding: 0;
   list-style: none;
   counter-reset: step;

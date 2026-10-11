@@ -57,12 +57,24 @@ const AREAS = [
    내용 출처: text/guide.txt
    (대괄호 안이 images 폴더의 이미지 이름, 그 아래 줄이 설명) */
 
-const GUIDE_STEPS = [
-  { image: "images/guide/guide_1.jpg", text: "사파리에서 웹을 연 다음, 오른쪽 하단 ··· 누른 다음 공유 클릭" },
-  { image: "images/guide/guide_2.jpg", text: "더 보기 클릭" },
-  { image: "images/guide/guide_3.jpg", text: "홈 화면에 추가 클릭" },
-  { image: "images/guide/guide_4.jpg", text: "추가 클릭" },
-  { image: "images/guide/guide_5.jpg", text: "" },
+const GUIDE_GROUPS = [
+  {
+    title: "아이폰",
+    steps: [
+      { image: "images/guide/guide_1.jpg", text: "사파리에서 웹을 연 다음, 오른쪽 하단 ··· 누른 다음 공유 클릭" },
+      { image: "images/guide/guide_2.jpg", text: "더 보기 클릭" },
+      { image: "images/guide/guide_3.jpg", text: "홈 화면에 추가 클릭" },
+      { image: "images/guide/guide_4.jpg", text: "추가 클릭" },
+      { image: "images/guide/guide_5.jpg", text: "" },
+    ],
+  },
+  {
+    title: "갤럭시",
+    steps: [
+      { image: "images/guide/guide_7.jpg", text: "크롬에서 웹을 연 다음, 오른쪽 상단 ··· 누르기" },
+      { image: "images/guide/guide_6.jpg", text: "설치 및 바로가기 누르기" },
+    ],
+  },
 ];
 
 /** 일정표를 그린다. */
@@ -84,31 +96,47 @@ function renderGuide() {
   const section = document.getElementById("view-install");
   if (!section) return;
 
-  const list = document.createElement("ol");
-  list.className = "guide";
+  const groups = [];
 
-  for (const [i, step] of GUIDE_STEPS.entries()) {
-    const item = document.createElement("li");
-    item.className = "guide-step";
+  for (const group of GUIDE_GROUPS) {
+    const wrap = document.createElement("div");
+    wrap.className = "guide-group";
 
-    const img = document.createElement("img");
-    img.src = step.image;
-    img.alt = step.text || `${i + 1}단계`;
-    img.loading = "lazy";
-    img.decoding = "async";
-    item.append(img);
+    // 가운데 제목과 그 아래 가로로 긴 회색 막대
+    const title = document.createElement("h2");
+    title.className = "guide-title";
+    title.textContent = group.title;
+    wrap.append(title);
 
-    if (step.text) {
-      const caption = document.createElement("p");
-      caption.className = "guide-text";
-      caption.textContent = step.text;
-      item.append(caption);
+    const list = document.createElement("ol");
+    list.className = "guide";
+
+    for (const [i, step] of group.steps.entries()) {
+      const item = document.createElement("li");
+      item.className = "guide-step";
+
+      const img = document.createElement("img");
+      img.src = step.image;
+      img.alt = step.text || `${i + 1}단계`;
+      img.loading = "lazy";
+      img.decoding = "async";
+      item.append(img);
+
+      if (step.text) {
+        const caption = document.createElement("p");
+        caption.className = "guide-text";
+        caption.textContent = step.text;
+        item.append(caption);
+      }
+
+      list.append(item);
     }
 
-    list.append(item);
+    wrap.append(list);
+    groups.push(wrap);
   }
 
-  section.replaceChildren(list);
+  section.replaceChildren(...groups);
 }
 
 /* ── 장소 목록 (지역 페이지 본문) ──
