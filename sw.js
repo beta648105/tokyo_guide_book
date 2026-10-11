@@ -5,7 +5,7 @@
  * 내용을 크게 바꿨을 땐 CACHE 버전을 올린다.
  */
 
-const CACHE = "tokyo-guide-v48";
+const CACHE = "tokyo-guide-v50";
 
 const PRECACHE = [
   "./",
@@ -92,6 +92,6 @@ self.addEventListener("fetch", (event) => {
         return res;
       })
       .catch(() => caches.match(req, { ignoreSearch: true })
-        .then((hit) => hit || caches.match("index.html")))
+        .then((hit) => hit || (sameOrigin ? caches.match("index.html") : Response.error())))
   );
 });

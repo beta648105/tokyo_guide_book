@@ -386,6 +386,7 @@ function renderSpots(data) {
     }
     parts.push(intro);
   }
+  if (data.map) parts.push(buildMap(data.map));
   for (const spot of data.spots) parts.push(buildSpot(spot));
   main.replaceChildren(...parts);
 }
@@ -1215,4 +1216,222 @@ function initLightbox() {
     if (!target) return;
     open(target.currentSrc || target.src);
   });
+}
+
+/* ── 지도 ──
+   설명한 장소들을 한 화면에 찍어 보여주고, 원하면 내 위치(GPS)도 같이 띄운다.
+   지도 타일과 Leaflet 은 인터넷이 있어야 보인다. */
+function buildMap(data) {
+  const section = document.createElement("section");
+  section.className = "map-block";
+
+  const head = document.createElement("div");
+  head.className = "sec-head";
+  const bar = document.createElement("span");
+  bar.className = "sec-bar";
+  const title = document.createElement("h2");
+  title.className = "sec-title";
+  title.textContent = data.title || "지도";
+  head.append(bar, title);
+  section.append(head);
+
+  // 지도 라이브러리를 못 불러왔으면(인터넷이 없을 때) 구글 지도 링크만 둔다
+  if (typeof L === "undefined") {
+    const fallback = document.createElement("p");
+    fallback.className = "ds-notes";
+    const p = document.createElement("p");
+    p.textContent = "지도를 불러오지 못했어. 인터넷 연결을 확인해 줘.";
+    fallback.append(p);
+    section.append(fallback);
+    return section;
+  }
+
+  const frame = document.createElement("div");
+  frame.className = "map-frame";
+
+  const canvas = document.createElement("div");
+  canvas.className = "map-canvas";
+  frame.append(canvas);
+
+  const tools = document.createElement("div");
+  tools.className = "map-tools";
+
+  const locBtn = document.createElement("button");
+  locBtn.type = "button";
+  locBtn.className = "map-btn";
+  locBtn.textContent = "내 위치";
+
+  const fullBtn = document.createElement("button");
+  fullBtn.type = "button";
+  fullBtn.className = "map-btn";
+  fullBtn.textContent = "크게 보기";
+
+  tools.append(locBtn, fullBtn);
+  frame.append(tools);
+  section.append(frame);
+
+  const note = document.createElement("p");
+  note.className = "map-note";
+  note.textContent = "지도를 누르면 크게 열리고, 그때 확대·이동할 수 있어.";
+  section.append(note);
+
+  // 지도는 화면에 붙은 뒤에 만들어야 크기를 제대로 잡는다
+  requestAnimationFrame(() => startMap());
+
+  function startMap() {
+  const map = L.map(canvas, {
+    zoomControl: false,
+    attributionControl: true,
+    // 작게 보일 때는 손가락이 지도에 갇히지 않도록 조작을 모두 꺼 둔다
+    dragging: false,
+    touchZoom: false,
+    doubleClickZoom: false,
+    scrollWheelZoom: false,
+    boxZoom: false,
+    keyboard: false,
+    tap: false,
+  });
+
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap",
+  }).addTo(map);
+
+  const points = [];
+  for (const spot of data.spots) {
+    const kinds = ["map-pin"];
+    if (spot.kind) kinds.push(`map-pin-${spot.kind}`);
+    kinds.push(`map-pin-${spot.labelPos || "right"}`);
+
+    const label = document.createElement("span");
+    label.className = kinds.join(" ");
+    const dot = document.createElement("i");
+    const name = document.createElement("b");
+    name.textContent = spot.name;
+    label.append(dot, name);
+
+    L.marker([spot.lat, spot.lng], {
+      icon: L.divIcon({ className: "map-pin-wrap", html: label.outerHTML, iconSize: [0, 0], iconAnchor: [0, 0] }),
+      keyboard: false,
+    }).addTo(map);
+
+    points.push([spot.lat, spot.lng]);
+  }
+
+  const bounds = L.latLngBounds(points);
+  const fitAll = () => map.fitBounds(bounds, { paddingTopLeft: [72, 52], paddingBottomRight: [72, 78] });
+  fitAll();
+
+  // ── 크게 보기 ──
+  const handlers = ["dragging", "touchZoom", "doubleClickZoom", "scrollWheelZoom", "boxZoom", "keyboard"];
+  let full = false;
+  let homeParent = null;
+  let homeNext = null;
+
+  const setFull = (on) => {
+    if (on === full) return;
+    full = on;
+
+    // 본문의 애니메이션 때문에 제자리에서는 position:fixed 가 화면 기준이 되지 않는다.
+    // 크게 볼 때는 지도를 body 바로 아래로 옮겼다가 닫을 때 되돌린다.
+    if (on) {
+      homeParent = frame.parentNode;
+      homeNext = frame.nextSibling;
+      document.body.append(frame);
+    } else if (homeParent) {
+      homeParent.insertBefore(frame, homeNext);
+    }
+
+    frame.classList.toggle("map-full", on);
+    fullBtn.textContent = on ? "닫기" : "크게 보기";
+    for (const name of handlers) {
+      if (!map[name]) continue;
+      if (on) map[name].enable(); else map[name].disable();
+    }
+    requestAnimationFrame(() => {
+      map.invalidateSize();
+      if (watchId === null) fitAll();
+    });
+  };
+
+  fullBtn.addEventListener("click", () => setFull(!full));
+  canvas.addEventListener("click", () => { if (!full) setFull(true); });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && full) setFull(false);
+  });
+
+  // ── 내 위치 ──
+  let watchId = null;
+  let meMarker = null;
+  let meCircle = null;
+  let centered = false;
+
+  const stopWatch = () => {
+    if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+    centered = false;
+    if (meMarker) { map.removeLayer(meMarker); meMarker = null; }
+    if (meCircle) { map.removeLayer(meCircle); meCircle = null; }
+    locBtn.classList.remove("on");
+    locBtn.textContent = "내 위치";
+    fitAll();
+  };
+
+  locBtn.addEventListener("click", () => {
+    if (watchId !== null) { stopWatch(); note.textContent = "내 위치 표시를 껐어."; return; }
+
+    if (!navigator.geolocation) {
+      note.textContent = "이 기기에서는 위치를 쓸 수 없어.";
+      return;
+    }
+
+    note.textContent = "위치를 찾는 중…";
+    locBtn.classList.add("on");
+    locBtn.textContent = "위치 끄기";
+
+    watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const { latitude, longitude, accuracy } = pos.coords;
+        const here = [latitude, longitude];
+
+        if (!meMarker) {
+          meMarker = L.marker(here, {
+            icon: L.divIcon({ className: "map-me-wrap", html: '<span class="map-me"></span>', iconSize: [0, 0], iconAnchor: [0, 0] }),
+            zIndexOffset: 1000,
+            keyboard: false,
+          }).addTo(map);
+          meCircle = L.circle(here, {
+            radius: accuracy,
+            color: "#2f6df2",
+            weight: 1,
+            opacity: 0.5,
+            fillColor: "#2f6df2",
+            fillOpacity: 0.12,
+          }).addTo(map);
+        } else {
+          meMarker.setLatLng(here);
+          meCircle.setLatLng(here).setRadius(accuracy);
+        }
+
+        if (!centered) {
+          centered = true;
+          // 장소들과 내 위치가 같이 보이게 (도쿄 밖이면 너무 멀어지므로 거리로 판단)
+          const far = L.latLng(here).distanceTo(bounds.getCenter()) > 4000;
+          if (far) map.setView(here, 16);
+          else map.fitBounds(L.latLngBounds([...points, here]), { paddingTopLeft: [72, 52], paddingBottomRight: [72, 78] });
+        }
+        note.textContent = `내 위치 표시 중 (오차 약 ${Math.round(accuracy)}m)`;
+      },
+      (err) => {
+        stopWatch();
+        note.textContent = err.code === err.PERMISSION_DENIED
+          ? "위치 권한이 꺼져 있어. 설정에서 이 앱의 위치 접근을 허용해 줘."
+          : "위치를 찾지 못했어. 실외에서 다시 해 봐.";
+      },
+      { enableHighAccuracy: true, maximumAge: 10000, timeout: 20000 }
+    );
+  });
+  }
+
+  return section;
 }
