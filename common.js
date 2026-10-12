@@ -1268,11 +1268,36 @@ function buildMap(data) {
 
   tools.append(locBtn, fullBtn);
   frame.append(tools);
+
+  // 길 안내 막대 (장소를 누르면 지도 위에 뜬다)
+  const routeBar = document.createElement("div");
+  routeBar.className = "map-route";
+  routeBar.hidden = true;
+
+  const routeText = document.createElement("div");
+  routeText.className = "map-route-text";
+  const routeName = document.createElement("p");
+  routeName.className = "map-route-name";
+  const routeInfo = document.createElement("p");
+  routeInfo.className = "map-route-info";
+  routeText.append(routeName, routeInfo);
+
+  const routeClose = document.createElement("button");
+  routeClose.type = "button";
+  routeClose.className = "map-route-close";
+  routeClose.setAttribute("aria-label", "길 안내 닫기");
+  routeClose.innerHTML =
+    '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path d="M6 6 18 18" /><path d="M18 6 6 18" /></svg>';
+
+  routeBar.append(routeText, routeClose);
+  frame.append(routeBar);
+
   section.append(frame);
 
   const note = document.createElement("p");
   note.className = "map-note";
-  note.textContent = "지도를 누르면 크게 열리고, 그때 확대·이동할 수 있어.";
+  note.textContent = "지도를 누르면 크게 열려. 장소 이름을 누르면 내 위치에서 거기까지 걸어가는 길을 보여줘.";
   section.append(note);
 
   // 지도는 화면에 붙은 뒤에 만들어야 크기를 제대로 잡는다
@@ -1310,10 +1335,13 @@ function buildMap(data) {
     name.textContent = spot.name;
     label.append(dot, name);
 
-    L.marker([spot.lat, spot.lng], {
+    const marker = L.marker([spot.lat, spot.lng], {
       icon: L.divIcon({ className: "map-pin-wrap", html: label.outerHTML, iconSize: [0, 0], iconAnchor: [0, 0] }),
       keyboard: false,
     }).addTo(map);
+
+    // 장소를 누르면 내 위치에서 거기까지 걸어가는 길을 그린다
+    marker.on("click", () => askRoute(spot));
 
     points.push([spot.lat, spot.lng]);
   }
@@ -1364,25 +1392,30 @@ function buildMap(data) {
   let watchId = null;
   let meMarker = null;
   let meCircle = null;
+  let meLatLng = null;
   let centered = false;
+  let pending = null;   // 위치를 받으면 바로 길을 그릴 장소
 
   const stopWatch = () => {
     if (watchId !== null) navigator.geolocation.clearWatch(watchId);
     watchId = null;
     centered = false;
+    meLatLng = null;
+    pending = null;
     if (meMarker) { map.removeLayer(meMarker); meMarker = null; }
     if (meCircle) { map.removeLayer(meCircle); meCircle = null; }
     locBtn.classList.remove("on");
     locBtn.textContent = "내 위치";
+    clearRoute();
     fitAll();
   };
 
-  locBtn.addEventListener("click", () => {
-    if (watchId !== null) { stopWatch(); note.textContent = "내 위치 표시를 껐어."; return; }
+  const startWatch = () => {
+    if (watchId !== null) return true;
 
     if (!navigator.geolocation) {
       note.textContent = "이 기기에서는 위치를 쓸 수 없어.";
-      return;
+      return false;
     }
 
     note.textContent = "위치를 찾는 중…";
@@ -1393,6 +1426,7 @@ function buildMap(data) {
       (pos) => {
         const { latitude, longitude, accuracy } = pos.coords;
         const here = [latitude, longitude];
+        meLatLng = here;
 
         if (!meMarker) {
           meMarker = L.marker(here, {
@@ -1413,6 +1447,15 @@ function buildMap(data) {
           meCircle.setLatLng(here).setRadius(accuracy);
         }
 
+        // 길을 기다리고 있었다면 위치를 받자마자 그린다
+        if (pending) {
+          const spot = pending;
+          pending = null;
+          centered = true;
+          drawRoute(spot);
+          return;
+        }
+
         if (!centered) {
           centered = true;
           // 장소들과 내 위치가 같이 보이게 (도쿄 밖이면 너무 멀어지므로 거리로 판단)
@@ -1420,7 +1463,7 @@ function buildMap(data) {
           if (far) map.setView(here, 16);
           else map.fitBounds(L.latLngBounds([...points, here]), { paddingTopLeft: [72, 52], paddingBottomRight: [72, 78] });
         }
-        note.textContent = `내 위치 표시 중 (오차 약 ${Math.round(accuracy)}m)`;
+        if (!routeLine) note.textContent = `내 위치 표시 중 (오차 약 ${Math.round(accuracy)}m)`;
       },
       (err) => {
         stopWatch();
@@ -1430,8 +1473,139 @@ function buildMap(data) {
       },
       { enableHighAccuracy: true, maximumAge: 10000, timeout: 20000 }
     );
+    return true;
+  };
+
+  locBtn.addEventListener("click", () => {
+    if (watchId !== null) { stopWatch(); note.textContent = "내 위치 표시를 껐어."; return; }
+    startWatch();
+  });
+
+  // ── 길 안내 ──
+  let routeLine = null;
+
+  function clearRoute() {
+    if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
+    routeBar.hidden = true;
+  }
+
+  function askRoute(spot) {
+    if (meLatLng) { drawRoute(spot); return; }
+    pending = spot;
+    routeBar.hidden = false;
+    routeName.textContent = `${spot.name}까지`;
+    routeInfo.textContent = "내 위치를 찾는 중…";
+    if (!startWatch()) { pending = null; clearRoute(); }
+  }
+
+  async function drawRoute(spot) {
+    const from = meLatLng;
+    const to = [spot.lat, spot.lng];
+
+    routeBar.hidden = false;
+    routeName.textContent = `${spot.name}까지`;
+    routeInfo.textContent = "길을 찾는 중…";
+    setFull(true);
+
+    let shape = null;
+    let meters = 0;
+    let seconds = 0;
+
+    try {
+      const res = await fetch("https://valhalla1.openstreetmap.de/route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          locations: [
+            { lat: from[0], lon: from[1] },
+            { lat: to[0], lon: to[1] },
+          ],
+          costing: "pedestrian",
+          units: "kilometers",
+        }),
+      });
+      const data = await res.json();
+      shape = decodeShape(data.trip.legs[0].shape);
+      meters = Math.round(data.trip.summary.length * 1000);
+      seconds = Math.round(data.trip.summary.time);
+    } catch (err) {
+      shape = null;
+    }
+
+    if (routeLine) map.removeLayer(routeLine);
+
+    if (shape && shape.length > 1) {
+      routeLine = L.polyline(shape, {
+        color: "#2f6df2",
+        weight: 5,
+        opacity: 0.9,
+        lineCap: "round",
+        lineJoin: "round",
+      }).addTo(map);
+      const minutes = Math.max(1, Math.round(seconds / 60));
+      routeInfo.textContent = `걸어서 ${formatDistance(meters)} · 약 ${minutes}분`;
+    } else {
+      // 길을 못 찾으면(너무 멀거나 서버가 안 될 때) 직선으로라도 보여준다
+      routeLine = L.polyline([from, to], {
+        color: "#2f6df2",
+        weight: 4,
+        opacity: 0.8,
+        dashArray: "7 9",
+      }).addTo(map);
+      const straight = L.latLng(from).distanceTo(L.latLng(to));
+      routeInfo.textContent = `걷는 길을 못 찾아서 직선으로 표시했어 · 직선거리 ${formatDistance(straight)}`;
+    }
+
+    note.textContent = "다른 장소를 누르면 그곳까지의 길을 보여줘.";
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      map.invalidateSize();
+      map.fitBounds(routeLine.getBounds(), { paddingTopLeft: [52, 96], paddingBottomRight: [52, 100] });
+    }));
+  }
+
+  routeClose.addEventListener("click", () => {
+    clearRoute();
+    fitAll();
   });
   }
 
   return section;
+}
+
+/** 미터를 읽기 좋게 (900m / 1.4km) */
+function formatDistance(meters) {
+  return meters < 1000 ? `${Math.round(meters)}m` : `${(meters / 1000).toFixed(1)}km`;
+}
+
+/** Valhalla 가 주는 압축된 좌표열(polyline6)을 푼다 */
+function decodeShape(text) {
+  const coords = [];
+  let index = 0;
+  let lat = 0;
+  let lng = 0;
+
+  while (index < text.length) {
+    let result = 1;
+    let shift = 0;
+    let byte;
+    do {
+      byte = text.charCodeAt(index++) - 64;
+      result += byte << shift;
+      shift += 5;
+    } while (byte >= 0x1f);
+    lat += (result & 1) ? ~(result >> 1) : (result >> 1);
+
+    result = 1;
+    shift = 0;
+    do {
+      byte = text.charCodeAt(index++) - 64;
+      result += byte << shift;
+      shift += 5;
+    } while (byte >= 0x1f);
+    lng += (result & 1) ? ~(result >> 1) : (result >> 1);
+
+    coords.push([lat / 1e6, lng / 1e6]);
+  }
+
+  return coords;
 }

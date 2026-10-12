@@ -588,6 +588,75 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   word-break: keep-all;
 }
 
+/* 길 안내 막대 */
+.map-route {
+  position: absolute;
+  z-index: 500;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.24);
+}
+
+.map-route[hidden] { display: none !important; }
+
+.map-frame.map-full .map-route {
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  left: 14px;
+  right: 14px;
+}
+
+.map-route-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.map-route-name {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text);
+}
+
+.map-route-info {
+  margin: 2px 0 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+  word-break: keep-all;
+}
+
+.map-route-close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: #eceef2;
+  cursor: pointer;
+}
+
+.map-route-close svg {
+  fill: none;
+  stroke: #4b5563;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
 /* 장소 표시 */
 .map-pin {
   position: absolute;
@@ -595,6 +664,7 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   align-items: center;
   gap: 5px;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .map-pin i {
@@ -652,6 +722,8 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   .map-btn { font-size: 15px; padding: 10px 16px; }
   .map-note { font-size: 14.5px; }
   .map-pin b { font-size: 14px; }
+  .map-route-name { font-size: 17px; }
+  .map-route-info { font-size: 14.5px; }
 }
 
 /* ── 일본어 회화 ──
