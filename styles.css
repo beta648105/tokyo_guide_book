@@ -741,8 +741,8 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 
 .wb-item > .thumb {
   flex: none;
-  width: 42%;
-  max-width: 320px;
+  width: 60%;
+  max-width: 460px;
   min-height: 118px;
 }
 
@@ -853,8 +853,8 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 
 .ds-head > .thumb {
   flex: none;
-  width: 44%;
-  max-width: 320px;
+  width: 60%;
+  max-width: 440px;
   aspect-ratio: 4 / 3;
 }
 
@@ -1255,10 +1255,12 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 }
 
 .spot-img {
+  display: block;
   flex: none;
   width: 44%;
   max-width: 300px;
   aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 
 /* ── 글씨 옆 작은 사진 ──
@@ -1294,13 +1296,11 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 }
 
 /* 사진이 오른쪽 끝에 붙는 배치는 좌우를 뒤집는다 */
-.wb-item.right > .thumb,
-.spot-head.flip > .thumb {
+.wb-item.right > .thumb {
   border-radius: 16px 0 0 16px;
 }
 
-.wb-item.right > .thumb::after,
-.spot-head.flip > .thumb::after {
+.wb-item.right > .thumb::after {
   background:
     linear-gradient(to top, transparent 70%, var(--thumb-shade)),
     linear-gradient(to bottom, transparent 60%, var(--thumb-shade)),

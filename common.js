@@ -283,6 +283,7 @@ function buildSpot(spot) {
   head.className = spot.flip ? "spot-head flip" : "spot-head";
 
   const img = document.createElement("img");
+  img.className = "spot-img";
   img.src = spot.image;
   img.alt = spot.title;
   img.loading = "lazy";
@@ -296,7 +297,7 @@ function buildSpot(spot) {
   const toggle = buildToggle();
   side.append(title, toggle);
 
-  head.append(wrapThumb(img, "spot-img"), side);
+  head.append(img, side);
   section.append(head);
 
   // 펼쳐지는 내용
