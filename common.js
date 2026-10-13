@@ -482,14 +482,24 @@ function buildBlock(block) {
       const name = document.createElement("h3");
       name.className = "ds-name";
       name.textContent = block.name;
-      head.append(block.wide ? img : wrapThumb(img), name);
       wrap.append(head);
+
+      // 넓은 사진은 이름·설명을 아래에, 작은 사진은 이름·설명을 사진 옆에 함께 둔다
+      let body = wrap;
+      if (block.wide) {
+        head.append(img, name);
+      } else {
+        body = document.createElement("div");
+        body.className = "ds-side";
+        body.append(name);
+        head.append(wrapThumb(img), body);
+      }
 
       for (const text of block.lines || (block.text ? [block.text] : [])) {
         const p = document.createElement("p");
         p.className = "ds-text";
         p.textContent = text;
-        wrap.append(p);
+        body.append(p);
       }
       // '• 역사: …' 처럼 머리말이 붙은 줄은 목록으로, 머리말은 굵게
       if (block.bullets && block.bullets.length) {
@@ -500,13 +510,13 @@ function buildBlock(block) {
           fillLabeled(li, text);
           ul.append(li);
         }
-        wrap.append(ul);
+        body.append(ul);
       }
       if (block.tip) {
         const tip = document.createElement("p");
         tip.className = "ds-tip";
         fillLabeled(tip, block.tip);
-        wrap.append(tip);
+        body.append(tip);
       }
       return wrap;
     }
