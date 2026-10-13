@@ -739,13 +739,11 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   padding: 0 var(--text-pad);
 }
 
-.wb-item img {
+.wb-item > .thumb {
   flex: none;
   width: 42%;
   max-width: 320px;
   min-height: 118px;
-  object-fit: cover;
-  display: block;
 }
 
 .wb-text {
@@ -853,13 +851,11 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   margin-bottom: 10px;
 }
 
-.ds-head img {
+.ds-head > .thumb {
   flex: none;
   width: 44%;
   max-width: 320px;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
-  display: block;
 }
 
 .ds-name {
@@ -1259,12 +1255,56 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 }
 
 .spot-img {
-  display: block;
   flex: none;
   width: 44%;
   max-width: 300px;
   aspect-ratio: 4 / 3;
+}
+
+/* ── 글씨 옆 작은 사진 ──
+   화면 끝에 붙은 쪽은 그대로 두어 옆에 붙어 있는 느낌을 살리고,
+   나머지 세 면만 홈 카드처럼 둥글게 하며 알아보기 힘들 만큼 옅게 어둡게 깐다. */
+.thumb {
+  --thumb-shade: rgba(0, 0, 0, 0.13);
+  position: relative;
+  display: block;
+  border-radius: 0 16px 16px 0;
+  overflow: hidden;
+  background: #dde0e6;
+}
+
+.thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  display: block;
+}
+
+.thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, transparent 70%, var(--thumb-shade)),
+    linear-gradient(to bottom, transparent 60%, var(--thumb-shade)),
+    linear-gradient(to right, transparent 70%, var(--thumb-shade));
+  pointer-events: none;
+}
+
+/* 사진이 오른쪽 끝에 붙는 배치는 좌우를 뒤집는다 */
+.wb-item.right > .thumb,
+.spot-head.flip > .thumb {
+  border-radius: 16px 0 0 16px;
+}
+
+.wb-item.right > .thumb::after,
+.spot-head.flip > .thumb::after {
+  background:
+    linear-gradient(to top, transparent 70%, var(--thumb-shade)),
+    linear-gradient(to bottom, transparent 60%, var(--thumb-shade)),
+    linear-gradient(to left, transparent 70%, var(--thumb-shade));
 }
 
 .spot-head-side {

@@ -265,6 +265,14 @@ function buildToggle() {
   return btn;
 }
 
+/** 옆에 글씨가 붙는 작은 사진: 홈 카드처럼 모서리를 둥글게 하고 아래쪽을 아주 옅게 어둡게 깐다 */
+function wrapThumb(img, className = "") {
+  const frame = document.createElement("span");
+  frame.className = className ? `thumb ${className}` : "thumb";
+  frame.append(img);
+  return frame;
+}
+
 /** 한 장소 블록을 만든다. */
 function buildSpot(spot) {
   const section = document.createElement("section");
@@ -275,7 +283,6 @@ function buildSpot(spot) {
   head.className = spot.flip ? "spot-head flip" : "spot-head";
 
   const img = document.createElement("img");
-  img.className = "spot-img";
   img.src = spot.image;
   img.alt = spot.title;
   img.loading = "lazy";
@@ -289,7 +296,7 @@ function buildSpot(spot) {
   const toggle = buildToggle();
   side.append(title, toggle);
 
-  head.append(img, side);
+  head.append(wrapThumb(img, "spot-img"), side);
   section.append(head);
 
   // 펼쳐지는 내용
@@ -422,7 +429,7 @@ function buildShowcaseItem(item) {
   p.className = "wb-text";
   fillLabeled(p, item.text);
 
-  row.append(img, p);
+  row.append(item.side === "top" ? img : wrapThumb(img), p);
   return row;
 }
 
@@ -474,7 +481,7 @@ function buildBlock(block) {
       const name = document.createElement("h3");
       name.className = "ds-name";
       name.textContent = block.name;
-      head.append(img, name);
+      head.append(block.wide ? img : wrapThumb(img), name);
       wrap.append(head);
 
       for (const text of block.lines || (block.text ? [block.text] : [])) {
