@@ -78,55 +78,170 @@ const GUIDE_GROUPS = [
 ];
 
 /* ── 일본어 회화 ──
-   내용 출처: text/japanese.txt (쓰임새별로 나눴다) */
+   내용 출처: text/japanese.txt (상황 → 세부 상황으로 나눴다) */
 
 const JAPANESE_GROUPS = [
   {
     title: "기본 인사",
-    phrases: [
-      { ja: "すみません", read: "스미마센", ko: "저기요 / 실례합니다 / 죄송합니다" },
-      { ja: "ありがとうございます", read: "아리가토 고자이마스", ko: "감사합니다" },
-      { ja: "大丈夫です", read: "다이조부데스", ko: "괜찮습니다" },
+    subs: [
+      {
+        label: "사과·말 걸기",
+        phrases: [
+          { ja: "すみません", read: "스미마센", ko: "실례합니다 / 저기요 / 죄송합니다" },
+          { ja: "ありがとうございます", read: "아리가토 고자이마스", ko: "감사합니다" },
+          { ja: "おはようございます", read: "오하요 고자이마스", ko: "안녕하세요(아침 인사)" },
+          { ja: "お願いします", read: "오네가이시마스", ko: "부탁합니다" },
+          { ja: "もう一度お願いします", read: "모오 이치도 오네가이시마스", ko: "한 번 더 말씀해 주세요" },
+        ],
+      },
     ],
   },
   {
     title: "가게에서",
-    phrases: [
-      { ja: "これはいくらですか", read: "고레와 이쿠라데스카", ko: "이거 얼마예요?" },
-      { ja: "これをください", read: "고레오 쿠다사이", ko: "이거 주세요" },
-      { ja: "袋はいりません", read: "후쿠로와 이리마센", ko: "봉투는 필요 없어요" },
+    subs: [
+      {
+        label: "가격·상품 확인",
+        phrases: [
+          { ja: "これはいくらですか", read: "코레와 이쿠라데스카", ko: "이거 얼마예요?" },
+          { ja: "これをください", read: "코레오 쿠다사이", ko: "이거 주세요" },
+          { ja: "ほかの色はありますか", read: "호카노 이로와 아리마스카", ko: "다른 색이 있나요?" },
+          { ja: "ほかのサイズはありますか", read: "호카노 사이즈와 아리마스카", ko: "다른 사이즈가 있나요?" },
+        ],
+      },
+      {
+        label: "결제·봉투·영수증",
+        phrases: [
+          { ja: "袋はいりません", read: "후쿠로와 이리마센", ko: "봉투는 필요 없어요" },
+          { ja: "カードは使えますか", read: "카아도와 츠카에마스카", ko: "카드 결제 되나요?" },
+          { ja: "レシートをください", read: "레시이토오 쿠다사이", ko: "영수증 주세요" },
+          { ja: "免税できますか", read: "멘제이 데키마스카", ko: "면세가 되나요?" },
+        ],
+      },
     ],
   },
   {
     title: "식당에서",
-    phrases: [
-      { ja: "いただきます", read: "이타다키마스", ko: "잘 먹겠습니다" },
-      { ja: "お会計をお願いします", read: "오카이케이오 오네가이시마스", ko: "계산해 주세요" },
+    subs: [
+      {
+        label: "입장·주문",
+        phrases: [
+          { ja: "いただきます", read: "이타다키마스", ko: "잘 먹겠습니다" },
+          { ja: "お会計をお願いします", read: "오카이케이오 오네가이시마스", ko: "계산해 주세요" },
+          { ja: "おすすめは何ですか", read: "오스스메와 난데스카", ko: "추천 메뉴가 뭐예요?" },
+          { ja: "水をください", read: "미즈오 쿠다사이", ko: "물 주세요" },
+          { ja: "持ち帰りできますか", read: "모치카에리 데키마스카", ko: "포장할 수 있나요?" },
+        ],
+      },
     ],
   },
   {
-    title: "길 찾을 때",
-    phrases: [
-      { ja: "トイレはどこですか", read: "토이레와 도코데스카", ko: "화장실이 어디예요?" },
-      { ja: "~はどこですか", read: "~와 도코데스카", ko: "~은 어디예요?" },
-      { ja: "道に迷いました", read: "미치니 마요이 마시타", ko: "길을 잃었어요" },
+    title: "길을 찾을 때",
+    subs: [
+      {
+        label: "위치·방향 묻기",
+        phrases: [
+          { ja: "トイレはどこですか", read: "토이레와 도코데스카", ko: "화장실은 어디예요?" },
+          { ja: "～はどこですか", read: "～와 도코데스카", ko: "~은/는 어디예요?" },
+          { ja: "道に迷いました", read: "미치니 마요이마시타", ko: "길을 잃었어요" },
+          { ja: "駅はどこですか", read: "에키와 도코데스카", ko: "역은 어디예요?" },
+          { ja: "ここに行きたいです", read: "코코니 이키타이데스", ko: "여기에 가고 싶어요" },
+        ],
+      },
     ],
   },
   {
     title: "구경할 때",
-    phrases: [
-      { ja: "写真を撮ってもいいですか", read: "샤신오 톳테모 이이데스카", ko: "사진 찍어도 되나요?" },
-      { ja: "待ち時間はどれくらいですか", read: "마치지칸와 도레쿠라이 데스카", ko: "대기 시간이 얼마나 되나요?" },
-      { ja: "これは何ですか", read: "고레와 난데스카", ko: "이건 뭐예요?" },
+    subs: [
+      {
+        label: "사진·관광 정보",
+        phrases: [
+          { ja: "写真を撮ってもいいですか", read: "샤신오 톳테모 이이데스카", ko: "사진 찍어도 되나요?" },
+          { ja: "待ち時間はどれくらいですか", read: "마치지칸와 도레쿠라이데스카", ko: "대기 시간은 얼마나 되나요?" },
+          { ja: "これは何ですか", read: "코레와 난데스카", ko: "이건 뭐예요?" },
+          { ja: "入場券はどこで買えますか", read: "뉴조켄와 도코데 카에마스카", ko: "입장권은 어디서 살 수 있나요?" },
+          { ja: "何時まで開いていますか", read: "난지마데 아이테이마스카", ko: "몇 시까지 열려 있나요?" },
+        ],
+      },
     ],
   },
   {
     title: "도움이 필요할 때",
-    phrases: [
-      { ja: "英語は話せますか", read: "에이고와 하나세마스카", ko: "영어 가능하세요?" },
-      { ja: "Wi-Fiは使えますか", read: "와이파이와 츠카에마스카", ko: "와이파이 쓸 수 있나요?" },
+    subs: [
+      {
+        label: "의사소통·도움 요청",
+        phrases: [
+          { ja: "英語は話せますか", read: "에이고와 하나세마스카", ko: "영어 할 수 있나요?" },
+          { ja: "Wi-Fiは使えますか", read: "와이파이와 츠카에마스카", ko: "와이파이 쓸 수 있나요?" },
+          { ja: "ゆっくり話してください", read: "윳쿠리 하나시테 쿠다사이", ko: "천천히 말해 주세요" },
+          { ja: "日本語があまり分かりません", read: "니혼고가 아마리 와카리마센", ko: "일본어를 잘 모릅니다" },
+          { ja: "助けてください", read: "타스케테 쿠다사이", ko: "도와주세요" },
+        ],
+      },
     ],
   },
+  {
+    title: "교통 이용하기",
+    subs: [
+      {
+        label: "전철·표·환승",
+        phrases: [
+          { ja: "この電車は東京駅に行きますか", read: "코노 덴샤와 도쿄에키니 이키마스카", ko: "이 전철은 도쿄역에 가나요?" },
+          { ja: "何番線ですか", read: "난반센데스카", ko: "몇 번 승강장인가요?" },
+          { ja: "切符を買いたいです", read: "킷푸오 카이타이데스", ko: "표를 사고 싶어요" },
+          { ja: "乗り換えはどこですか", read: "노리카에와 도코데스카", ko: "환승은 어디서 하나요?" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "숙소 이용하기",
+    subs: [
+      {
+        label: "체크인·짐·시설",
+        phrases: [
+          { ja: "チェックインをお願いします", read: "체크인오 오네가이시마스", ko: "체크인 부탁합니다" },
+          { ja: "予約しています", read: "요야쿠 시테이마스", ko: "예약했습니다" },
+          { ja: "荷物を預けてもいいですか", read: "니모츠오 아즈케테모 이이데스카", ko: "짐을 맡겨도 될까요?" },
+          { ja: "Wi-Fiのパスワードは何ですか", read: "와이파이노 파스와아도와 난데스카", ko: "와이파이 비밀번호가 뭐예요?" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "곤란한 상황",
+    subs: [
+      {
+        label: "분실·몸이 아플 때",
+        phrases: [
+          { ja: "財布をなくしました", read: "사이후오 나쿠시마시타", ko: "지갑을 잃어버렸어요" },
+          { ja: "忘れ物をしました", read: "와스레모노오 시마시타", ko: "물건을 두고 왔어요" },
+          { ja: "病院はどこですか", read: "뵤오인와 도코데스카", ko: "병원은 어디예요?" },
+          { ja: "気分が悪いです", read: "키분가 와루이데스", ko: "몸이 좋지 않아요" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "숫자·시간·기타",
+    subs: [
+      {
+        label: "수량·시간 확인",
+        phrases: [
+          { ja: "一つください", read: "히토츠 쿠다사이", ko: "하나 주세요" },
+          { ja: "何時ですか", read: "난지데스카", ko: "몇 시예요?" },
+          { ja: "何分かかりますか", read: "난푼 카카리마스카", ko: "몇 분 걸리나요?" },
+          { ja: "大丈夫です", read: "다이조부데스", ko: "괜찮습니다" },
+          { ja: "結構です", read: "켓코오데스", ko: "괜찮습니다 / 사양하겠습니다", note: "권유를 거절할 때 쓰일 수 있어 말투와 상황에 주의하세요." },
+        ],
+      },
+    ],
+  },
+];
+
+/** 맨 아래 작은 회색 안내 (japanese.txt 의 '빠른 사용 팁') */
+const JAPANESE_TIPS = [
+  "‘～はどこですか’의 ～ 자리에 찾는 장소를 넣으면 된다. 예: 駅はどこですか(역은 어디예요?)",
+  "한글 발음은 이해를 돕기 위한 근사치로, 일본어 소리와 완전히 같지는 않다.",
 ];
 
 /** 일본어 회화를 그린다. */
@@ -159,39 +274,63 @@ function renderJapanese() {
       toggle.setAttribute("aria-label", open ? "접기" : "자세히 보기");
     });
 
-    const list = document.createElement("ul");
-    list.className = "jp-list";
-
-    for (const phrase of group.phrases) {
-      const item = document.createElement("li");
-      item.className = "jp-item";
-
-      const ja = document.createElement("p");
-      ja.className = "jp-ja";
-      ja.lang = "ja";
-      ja.textContent = phrase.ja;
-
-      const read = document.createElement("p");
-      read.className = "jp-read";
-      read.textContent = phrase.read;
-
-      const ko = document.createElement("p");
-      ko.className = "jp-ko";
-      ko.textContent = phrase.ko;
-
-      item.append(ja, read, ko);
-      list.append(item);
-    }
-
     const body = document.createElement("div");
     body.className = "jp-body";
     const inner = document.createElement("div");
     inner.className = "jp-body-inner";
-    inner.append(list);
+
+    for (const sub of group.subs) {
+      // 세부 상황 이름 (예: 결제·봉투·영수증)
+      const label = document.createElement("p");
+      label.className = "jp-sub";
+      label.textContent = sub.label;
+
+      const list = document.createElement("ul");
+      list.className = "jp-list";
+
+      for (const phrase of sub.phrases) {
+        const item = document.createElement("li");
+        item.className = "jp-item";
+
+        const ja = document.createElement("p");
+        ja.className = "jp-ja";
+        ja.lang = "ja";
+        ja.textContent = phrase.ja;
+
+        const read = document.createElement("p");
+        read.className = "jp-read";
+        read.textContent = phrase.read;
+
+        const ko = document.createElement("p");
+        ko.className = "jp-ko";
+        ko.textContent = phrase.ko;
+
+        item.append(ja, read, ko);
+        if (phrase.note) {
+          const note = document.createElement("p");
+          note.className = "jp-note";
+          note.textContent = `※ ${phrase.note}`;
+          item.append(note);
+        }
+        list.append(item);
+      }
+
+      inner.append(label, list);
+    }
+
     body.append(inner);
     sec.append(body);
     parts.push(sec);
   }
+
+  const tips = document.createElement("div");
+  tips.className = "ds-notes jp-tips";
+  for (const text of JAPANESE_TIPS) {
+    const p = document.createElement("p");
+    p.textContent = text;
+    tips.append(p);
+  }
+  parts.push(tips);
 
   section.replaceChildren(...parts);
 }

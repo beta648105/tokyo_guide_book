@@ -850,6 +850,29 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   word-break: keep-all;
 }
 
+/* 세부 상황 이름 (예: 결제·봉투·영수증) */
+.jp-sub {
+  margin: 10px var(--text-pad) 0;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+}
+
+.jp-note {
+  margin: 4px 0 0;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+  word-break: keep-all;
+}
+
+.jp-tips { margin-top: 26px; }
+
 @media (min-width: 700px) {
   #view-japanese { --text-pad: 26px; }
   .jp-ja { font-size: 22px; }
