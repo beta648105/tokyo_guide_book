@@ -55,6 +55,7 @@ renderGrid();
 renderTimeline();
 renderJapanese();
 renderHotel();
+renderSafety();
 renderGuide();
 initViews();
 registerServiceWorker();

@@ -366,22 +366,457 @@ function renderHotel() {
   section.replaceChildren(...parts);
 }
 
-/** 일정표를 그린다. */
+/* ── 일정표 (메뉴) ──
+   내용 출처: images/timeline/timeline_1~4.jpg (이미지 대신 글로 다시 만들었다)
+   group 은 조 이름(A·B·C·D), 색은 styles.css 의 .tl-group 에서 정한다. */
+
+const SCHEDULE = [
+  {
+    day: "1일차",
+    date: "10월 20일 (화)",
+    legs: [
+      {
+        route: "대전 → 인천",
+        by: "전용차량",
+        items: [
+          { time: "02:00", text: "대전대신고등학교 집결 및 출발", place: "대전대신고등학교" },
+          { time: "06:00", text: "인천국제공항 도착 후 출국 수속", place: "인천공항 T2 3층 H카운터" },
+        ],
+      },
+      {
+        route: "인천 → 나리타",
+        by: "OZ102 (아시아나항공)",
+        items: [
+          { time: "08:25", text: "인천국제공항 출발", place: "인천국제공항 T2" },
+          { time: "10:50", text: "나리타국제공항 도착 후 입국 수속", place: "나리타국제공항" },
+        ],
+      },
+      {
+        route: "도쿄",
+        by: "전용차량",
+        items: [
+          { time: "12:30", group: "A", text: "중식 → 다이바시티 쇼핑몰 → 석식 → 오다이바 해변공원·레인보우브릿지", place: "다이바시티 · 오다이바", note: "5반, 7반 · 중식 스타미나타로 · 석식 더오븐" },
+          { time: "13:00", group: "B", text: "중식 → 다이바시티 쇼핑몰 · 오다이바 해변공원·레인보우브릿지 → 석식", place: "다이바시티 · 오다이바", note: "4반, 6반, 10반 · 중식 스타미나타로 · 석식 더오븐" },
+          { time: "12:30", group: "C", text: "중식 → 아키하바라 → 석식", place: "아키하바라", note: "1반, 8반 · 중식 스타미나타로 · 석식 샤브요" },
+          { time: "13:00", group: "D", text: "중식 → 아키하바라 → 석식", place: "아키하바라", note: "2반, 3반, 9반 · 중식 스타미나타로 · 석식 샤브요" },
+          { time: "19:30", text: "호텔 이동 → 20:00 체크인 및 자유시간", place: "시나가와 프린스 호텔" },
+        ],
+      },
+    ],
+  },
+  {
+    day: "2일차",
+    date: "10월 21일 (수)",
+    legs: [
+      {
+        route: "도쿄",
+        by: "전용차량",
+        items: [
+          { time: "06:00", text: "기상 및 호텔 조식", place: "호텔 조식당 하푸나", note: "메인타워 1층 · 뷔페" },
+          { time: "08:30", group: "A·B", text: "아키하바라 → 중식 → 워너브라더스 스튜디오 이동", place: "아키하바라", note: "중식 샤브요" },
+          { time: "14:00", group: "A·B", text: "메이킹 오브 해리포터 관람 (~18:00)", place: "워너브라더스 스튜디오", note: "석식 자유식 (1,500엔)" },
+          { time: "08:30", group: "C·D", text: "워너브라더스 스튜디오 이동 → 09:30 메이킹 오브 해리포터 관람", place: "워너브라더스 스튜디오", note: "관람 ~13:30 · 중식 자유식 (1,500엔)" },
+          { time: "14:30", group: "C", text: "다이바시티 쇼핑몰 → 석식 → 오다이바 해변공원·레인보우브릿지", place: "다이바시티 · 오다이바", note: "석식 더오븐" },
+          { time: "14:30", group: "D", text: "다이바시티 쇼핑몰 · 오다이바 해변공원·레인보우브릿지 → 석식", place: "다이바시티 · 오다이바", note: "석식 더오븐" },
+          { time: "19:30", text: "호텔 이동" },
+          { time: "20:00", text: "호텔 귀환 및 자유시간", place: "시나가와 프린스 호텔" },
+        ],
+      },
+    ],
+  },
+  {
+    day: "3일차",
+    date: "10월 22일 (목)",
+    legs: [
+      {
+        route: "도쿄",
+        by: "전용차량",
+        items: [
+          { time: "06:00", text: "기상 및 호텔 조식", place: "호텔 조식당 하푸나" },
+          { time: "10:00", text: "도쿄 디즈니씨로 이동", note: "약 30분 소요" },
+          { time: "10:30", text: "도쿄 디즈니씨 전일 자유 관광", place: "도쿄 디즈니씨", note: "프리패스권 포함" },
+          { time: "", text: "중식 · 석식 자유식", place: "도쿄 디즈니씨 내 식당", note: "각 1,500엔 현금 지급" },
+          { time: "21:00", text: "호텔 이동" },
+          { time: "21:30", text: "호텔 귀환 및 휴식", place: "시나가와 프린스 호텔" },
+        ],
+      },
+    ],
+  },
+  {
+    day: "4일차",
+    date: "10월 23일 (금)",
+    legs: [
+      {
+        route: "도쿄 → 나리타",
+        by: "전용차량",
+        items: [
+          { time: "06:00", text: "기상 및 호텔 조식", place: "호텔 조식당 하푸나" },
+          { time: "08:40", text: "호텔 체크아웃 후 나리타로 이동", note: "짐 · 여권 꼭 확인!" },
+          { time: "10:00", text: "문화탐방 · 나리타산 신승사 탐방", place: "나리타산 신승사" },
+          { time: "11:00", text: "나리타국제공항 이동 후 출국 수속", place: "나리타국제공항" },
+        ],
+      },
+      {
+        route: "나리타 → 인천",
+        by: "OZ101",
+        items: [
+          { time: "12:50", text: "나리타국제공항 출발", place: "나리타국제공항", note: "중식 기내식" },
+          { time: "15:25", text: "인천국제공항 도착", place: "인천국제공항 T2" },
+        ],
+      },
+      {
+        route: "인천 → 대전",
+        by: "전용차량",
+        items: [
+          { time: "", text: "공항 인근 식당에서 석식 후 대전 이동", place: "공항 인근 식당" },
+          { time: "20:30", text: "대전대신고등학교 도착 후 해산", place: "대전대신고등학교" },
+        ],
+      },
+    ],
+  },
+];
+
+/** 회색 막대 + 큰 제목 (섹션 머리) */
+function buildSecHead(text) {
+  const head = document.createElement("div");
+  head.className = "sec-head";
+  const bar = document.createElement("span");
+  bar.className = "sec-bar";
+  const title = document.createElement("h2");
+  title.className = "sec-title";
+  title.textContent = text;
+  head.append(bar, title);
+  return head;
+}
+
+/** 일정표를 그린다. 날짜별로, 이동 구간(지역·교통) 아래에 시간순 일정 */
 function renderTimeline() {
   const section = document.getElementById("view-schedule");
   if (!section) return;
 
-  // 1~4번 일정표를 가로로 꽉 채워 위에서 아래로 차례대로
-  const images = [1, 2, 3, 4].map((n) => {
-    const img = document.createElement("img");
-    img.className = "timeline-img zoomable";   // 글씨가 작아서 누르면 크게 볼 수 있게
-    img.src = `images/timeline/timeline_${n}.jpg`;
-    img.alt = `여행 일정표 ${n}`;
-    img.loading = "lazy";
-    img.decoding = "async";
-    return img;
+  const parts = [];
+  for (const day of SCHEDULE) {
+    const wrap = document.createElement("section");
+    wrap.className = "tl-day";
+    const head = buildSecHead(day.day);
+    const date = document.createElement("span");
+    date.className = "tl-date";
+    date.textContent = day.date;
+    head.append(date);
+    wrap.append(head);
+
+    for (const leg of day.legs) {
+      const route = document.createElement("p");
+      route.className = "tl-leg";
+      const where = document.createElement("b");
+      where.textContent = leg.route;
+      route.append(where, ` · ${leg.by}`);
+      wrap.append(route);
+
+      const list = document.createElement("ul");
+      list.className = "tl-list";
+      for (const item of leg.items) {
+        const li = document.createElement("li");
+        li.className = "tl-item";
+
+        const time = document.createElement("span");
+        time.className = "tl-time";
+        time.textContent = item.time || "";
+
+        const body = document.createElement("div");
+        body.className = "tl-body";
+        const text = document.createElement("p");
+        text.className = "tl-text";
+        if (item.group) {
+          const tag = document.createElement("span");
+          tag.className = "tl-group";
+          tag.dataset.group = item.group.charAt(0);
+          tag.textContent = `${item.group}조`;
+          text.append(tag);
+        }
+        text.append(item.text);
+        body.append(text);
+        if (item.place) {
+          const place = document.createElement("p");
+          place.className = "tl-place";
+          place.textContent = item.place;
+          body.append(place);
+        }
+        if (item.note) {
+          const note = document.createElement("p");
+          note.className = "tl-note";
+          note.textContent = item.note;
+          body.append(note);
+        }
+
+        li.append(time, body);
+        list.append(li);
+      }
+      wrap.append(list);
+    }
+    parts.push(wrap);
+  }
+  section.replaceChildren(...parts);
+}
+
+/* ── 유의사항 (메뉴) ──
+   내용 출처: 사전안전교육 자료 (images/safe/, 저장소에는 올리지 않음)
+   글 안의 **굵게** 는 굵은 글씨로 바뀐다.
+   rules: 번호 목록 / steps: [제목, 설명] 번호 목록 / groups: 소제목별 묶음 */
+
+const SAFETY = [
+  {
+    title: "안전 및 생활수칙",
+    rules: [
+      "**인솔교사·가이드 전화번호**를 핸드폰에 저장하기",
+      "**여권**은 항상 몸에 지니고 분실에 주의하기",
+      "고가의 귀중품과 필요 이상의 현금은 소지하지 않기",
+      "차량 및 비행기에서는 지정된 좌석에 앉은 뒤 **안전벨트**를 반드시 착용하기",
+    ],
+  },
+  {
+    title: "도쿄 시내 탐방",
+    rules: [
+      "조별로 이동하고, 절대로 **개인행동**을 하지 않기",
+      "일본은 차량이 **좌측**으로 통행하므로, 길을 건널 때 한 번 더 확인하기",
+      "집합 **시간**과 집합 **장소**를 꼭 지키기",
+      "위험한 시설에는 다가가지 말고, 지정된 길로만 이동하기",
+      "지갑·휴대폰 소매치기와 분실에 주의하기",
+    ],
+  },
+  {
+    title: "테마파크 탐방",
+    rules: [
+      "편한 **운동화**를 신고, 우비와 겉옷을 챙기기",
+      "일행과 함께 이동하고, **인솔교사 연락처**를 메모해 두기",
+      "워너브라더스는 일부 전시물의 촬영이 제한되므로 안내를 따르기",
+      "**식사비**를 잘 보관하고, 물을 자주 마시기",
+      "집합 **시간·장소**를 꼭 확인하고 **늦지 않게** 이동하기",
+    ],
+  },
+  {
+    title: "숙소 체류 시",
+    rules: [
+      "선생님의 숙소 **생활지도** 내용을 지키기",
+      "화재·지진 등 재난에 대비해 **탈출 경로**를 미리 알아 두기",
+      "화재가 나면 젖은 수건을 코에 대고 낮은 자세로 비상구로 대피하기",
+      "허가 없이 외출하거나 다른 방에 들어가지 않기",
+      "객실 안에서는 금연, 복도에서는 떠들지 않기",
+    ],
+  },
+  {
+    title: "일본 여행 에티켓 10가지",
+    steps: [
+      ["길을 건널 땐 차량 방향 확인", "일본은 차량이 왼쪽으로 다닌다. 횡단보도에서는 평소보다 한 번 더 좌우를 확인한다."],
+      ["전철·버스에서는 조용히", "큰 소리로 떠들거나 음악·영상을 크게 틀지 않는다. 휴대전화 통화는 되도록 삼간다."],
+      ["줄은 꼭 지키기", "전철, 식당, 계산대에서는 정해진 줄에 선다. 새치기는 하지 않는다."],
+      ["길을 여러 명이 가로막지 않기", "나란히 걸으며 길 전체를 막지 않도록 하고, 사람이 오면 자연스럽게 비켜 준다."],
+      ["쓰레기는 직접 챙기기", "거리에 쓰레기통이 많지 않다. 작은 봉투를 준비해 숙소나 정해진 곳에서 버린다."],
+      ["사진 찍기 전에 한 번 확인", "신사·사찰·가게의 촬영 금지 구역을 확인한다. 허락 없이 다른 사람을 찍거나 SNS에 올리지 않는다."],
+      ["식당에서는 기본 매너 지키기", "젓가락을 밥에 꽂거나 젓가락끼리 음식을 주고받지 않는다. 식사 전 “이타다키마스”, 식사 후 “고치소사마데시타”."],
+      ["신사와 사찰에서는 차분하게", "떠들거나 뛰지 않는다. 신사에서는 박수를 치며 참배하고, 사찰에서는 박수를 치지 않는 것이 일반적이다."],
+      ["호텔에서는 복도 소음 주의", "밤늦게 방이나 복도에서 떠들지 않는다. 문을 세게 닫거나 뛰어다니면 다른 손님에게 피해가 된다."],
+      ["“스미마센”, “아리가토 고자이마스”", "스미마센: 실례합니다 / 죄송합니다. 아리가토 고자이마스: 감사합니다."],
+    ],
+  },
+  {
+    title: "응급상황 행동요령",
+    groups: [
+      {
+        label: "전세버스 교통사고가 났을 때",
+        steps: [
+          ["위험 확인", "안전벨트를 풀기 전에 주변 위험을 확인한다."],
+          ["순차 대피", "선생님 지시에 따라 차례대로 대피한다."],
+          ["버스와 거리 두기", "버스에서 멀리 떨어진 곳으로 이동한다."],
+          ["인원 확인", "인원을 확인하고 기다린다."],
+        ],
+      },
+      {
+        label: "호텔에 불이 났을 때",
+        steps: [
+          ["화재 신고", "선생님·프런트에 알리고 안내에 집중한다."],
+          ["낮은 자세로 대피", "엘리베이터 대신 비상계단으로 이동하고, 젖은 수건으로 입과 코를 가린다."],
+          ["안전한 곳으로", "건물 밖 지정된 안전장소로 이동한다."],
+          ["인원 확인", "위치와 상태를 알리고 기다린다."],
+        ],
+      },
+      {
+        label: "지진이 났을 때",
+        steps: [
+          ["몸 보호", "탁자 아래로 들어가 머리를 보호한다."],
+          ["출구 확보", "흔들림이 멈추면 문을 열어 출구를 확보한다."],
+          ["계단으로 대피", "엘리베이터는 타지 않고 계단으로 이동한다."],
+          ["넓은 곳으로", "공원·운동장 등 넓은 곳에서 기다린다."],
+        ],
+      },
+      {
+        label: "친구가 안 보일 때",
+        steps: [
+          ["바로 알리기", "친구가 안 보이면 선생님께 바로 알린다."],
+          ["제자리에서 기다리기", "혼자 찾아다니지 않고 기다린다."],
+          ["찾으면 알리기", "친구를 찾으면 바로 알린다."],
+          ["지시 따르기", "선생님 지시에 따라 행동한다."],
+        ],
+      },
+    ],
+  },
+  {
+    title: "여권·짐 분실 시",
+    warn: "절대 혼자 찾으러 다니지 않기!",
+    groups: [
+      {
+        label: "여권을 잃어버렸을 때",
+        steps: [
+          ["인솔교사에게 먼저 알리기", ""],
+          ["경찰서에서 분실증명서 발급", ""],
+          ["대사관에서 여권 재발급 신청", ""],
+          ["서류를 갖추면 현지에서 재발급", ""],
+        ],
+      },
+      {
+        label: "짐을 잃어버렸을 때",
+        steps: [
+          ["인솔교사에게 먼저 알리기", ""],
+          ["공항 신고소·호텔 프런트에 신고", ""],
+          ["분실·도난 증명서 받기", ""],
+          ["여행자보험으로 보상 청구", ""],
+        ],
+      },
+    ],
+  },
+  {
+    title: "보조배터리 기내 반입",
+    rules: [
+      "보조배터리는 **반드시 기내**에 들고 타기 (부치는 짐에 넣지 않기)",
+      "**1인 2개**까지, 100Wh(27,000mAh) 이하만 가능",
+      "**단자 보호** 필수 (개별 비닐백·절연테이프·보호캡 중 1개)",
+      "비행 중 기내에서 **사용·충전 금지**",
+      "과열되거나 부풀면 즉시 승무원에게 알리기",
+    ],
+  },
+  {
+    title: "무료 수하물 기준",
+    tables: [
+      { label: "부치는 짐 (위탁 수하물)", rows: [["크기", "158cm 이하 (가로+세로+높이 합계)"], ["무게", "23kg 이하"], ["개수", "1개"]] },
+      { label: "들고 타는 짐 (기내 수하물)", rows: [["크기", "115cm 이하 (55×20×40)"], ["무게", "10kg 이하"], ["개수", "1개"]] },
+    ],
+    foot: "※ 크기는 손잡이·바퀴를 포함한다.",
+  },
+  {
+    title: "우리 함께 지켜요!",
+    groups: [
+      { label: "약속 지키기", list: ["약속 시간 지키기", "약속 장소 지키기", "선생님 공지에 집중하기"] },
+      { label: "건강 지키기", list: ["개인 비상약 챙기기 (알레르기 약 등)", "충분히 쉬기", "밤새지 않기"] },
+      { label: "안전 지키기", list: ["혼자 다니지 않기", "선생님과 인솔자 말씀 잘 따르기", "호텔에 들어온 뒤에는 나가지 않기"] },
+    ],
+  },
+];
+
+/** '**굵게**' 표시를 굵은 글씨로 바꿔 넣는다 */
+function fillBold(el, text) {
+  text.split(/\*\*(.+?)\*\*/).forEach((piece, i) => {
+    if (!piece) return;
+    if (i % 2) {
+      const b = document.createElement("b");
+      b.textContent = piece;
+      el.append(b);
+    } else {
+      el.append(piece);
+    }
   });
-  section.replaceChildren(...images);
+}
+
+/** 번호가 붙은 목록. 항목은 글 한 줄이거나 [제목, 설명] */
+function buildNumbered(items) {
+  const ol = document.createElement("ol");
+  ol.className = "sf-list";
+  items.forEach((item, i) => {
+    const li = document.createElement("li");
+    li.className = "sf-item";
+    const no = document.createElement("span");
+    no.className = "sf-no";
+    no.textContent = String(i + 1);
+    const body = document.createElement("div");
+    body.className = "sf-body";
+    if (Array.isArray(item)) {
+      const t = document.createElement("p");
+      t.className = "sf-title";
+      t.textContent = item[0];
+      body.append(t);
+      if (item[1]) {
+        const d = document.createElement("p");
+        d.className = "sf-desc";
+        d.textContent = item[1];
+        body.append(d);
+      }
+    } else {
+      const t = document.createElement("p");
+      t.className = "sf-text";
+      fillBold(t, item);
+      body.append(t);
+    }
+    li.append(no, body);
+    ol.append(li);
+  });
+  return ol;
+}
+
+/** 유의사항을 그린다 */
+function renderSafety() {
+  const section = document.getElementById("view-safety");
+  if (!section) return;
+
+  const parts = [];
+  for (const block of SAFETY) {
+    const wrap = document.createElement("section");
+    wrap.className = "sf-section";
+    wrap.append(buildSecHead(block.title));
+
+    if (block.warn) {
+      const warn = document.createElement("p");
+      warn.className = "sf-warn";
+      warn.textContent = block.warn;
+      wrap.append(warn);
+    }
+    if (block.rules) wrap.append(buildNumbered(block.rules));
+    if (block.steps) wrap.append(buildNumbered(block.steps));
+
+    for (const group of block.groups || []) {
+      const label = document.createElement("p");
+      label.className = "ds-sublabel sf-label";
+      label.textContent = group.label;
+      wrap.append(label);
+      if (group.steps) wrap.append(buildNumbered(group.steps));
+      if (group.list) {
+        const ul = document.createElement("ul");
+        ul.className = "ds-bullets";
+        for (const text of group.list) {
+          const li = document.createElement("li");
+          li.textContent = text;
+          ul.append(li);
+        }
+        wrap.append(ul);
+      }
+    }
+
+    for (const table of block.tables || []) {
+      const label = document.createElement("p");
+      label.className = "ds-sublabel sf-label";
+      label.textContent = table.label;
+      const t = buildBlock({ type: "table", rows: table.rows });
+      t.classList.remove("reveal");
+      t.classList.add("sf-table");
+      wrap.append(label, t);
+    }
+    if (block.foot) {
+      const foot = document.createElement("p");
+      foot.className = "sf-foot";
+      foot.textContent = block.foot;
+      wrap.append(foot);
+    }
+    parts.push(wrap);
+  }
+  section.replaceChildren(...parts);
 }
 
 /** 홈 화면 추가 안내를 그린다. 세 페이지가 같은 내용을 쓴다. */
@@ -1081,6 +1516,7 @@ const MENU_ITEMS = [
   { label: "일정표", view: "schedule" },
   { label: "일본어 회화", view: "japanese" },
   { label: "호텔 정보", view: "hotel" },
+  { label: "유의사항", view: "safety" },
   { label: "홈 화면 추가", view: "install" },
 ];
 
@@ -1088,7 +1524,7 @@ const MENU_ITEMS = [
    어느 페이지에서든 상단 사진은 그대로 두고 그 아래만 바꾼다.
    시부야에서 열면 시부야 사진이, 홈에서 열면 도쿄 사진이 그대로 남는다. */
 
-const VIEWS = ["main", "schedule", "japanese", "hotel", "install"];
+const VIEWS = ["main", "schedule", "japanese", "hotel", "safety", "install"];
 
 /** 메뉴로 연 화면에서 사진 아래에 표시할 제목 */
 const VIEW_TITLES = Object.fromEntries(

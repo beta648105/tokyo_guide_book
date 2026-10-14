@@ -5,7 +5,7 @@
  * 내용을 크게 바꿨을 땐 CACHE 버전을 올린다.
  */
 
-const CACHE = "tokyo-guide-v60";
+const CACHE = "tokyo-guide-v61";
 
 const PRECACHE = [
   "./",
@@ -28,10 +28,6 @@ const PRECACHE = [
   "naritasan.js",
   "manifest.webmanifest",
   "images/home/tokyo.png",
-  "images/timeline/timeline_1.jpg",
-  "images/timeline/timeline_2.jpg",
-  "images/timeline/timeline_3.jpg",
-  "images/timeline/timeline_4.jpg",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-maskable-512.png",

@@ -501,18 +501,215 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   padding-right: 0;
 }
 
-.timeline-img {
-  display: block;
-  width: 100%;
-  height: auto;
+#view-schedule { --text-pad: 18px; }
+
+/* 날짜 하나 */
+.tl-day { margin: 0 0 34px; }
+
+.tl-date {
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--sub);
 }
 
-/* 넓은 화면에서는 너무 커지지 않게 제한 */
-@media (min-width: 1000px) {
-  .timeline-img {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
+/* 이동 구간 (지역 · 교통) */
+.tl-leg {
+  margin: 16px var(--text-pad) 4px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #dde0e6;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+}
+
+.tl-leg b { font-weight: 700; color: var(--text); }
+
+.tl-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 시간 | 일정 · 장소 · 비고 */
+.tl-item {
+  display: flex;
+  gap: 12px;
+  padding: 11px var(--text-pad);
+  border-bottom: 1px solid #d3d7de;
+}
+
+.tl-list .tl-item:last-child { border-bottom: 0; }
+
+.tl-time {
+  flex: none;
+  width: 44px;
+  padding-top: 1px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.tl-body { flex: 1; min-width: 0; }
+
+.tl-text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.tl-place {
+  margin: 3px 0 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+}
+
+.tl-note {
+  margin: 2px 0 0;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+  word-break: keep-all;
+}
+
+/* 조 표시 (원래 일정표의 조별 색) */
+.tl-group {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 7px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #fff;
+  vertical-align: 1px;
+  background: #8a929e;
+}
+
+.tl-group[data-group="A"] { background: #d64545; }
+.tl-group[data-group="B"] { background: #2f9e5b; }
+.tl-group[data-group="C"] { background: #2f6fc4; }
+.tl-group[data-group="D"] { background: #d49b12; }
+
+/* ── 유의사항 ── */
+#view-safety {
+  --text-pad: 18px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sf-section { margin: 0 0 34px; }
+
+.sf-warn {
+  margin: 0 var(--text-pad) 10px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #d64545;
+}
+
+.sf-label { padding: 0 var(--text-pad); margin: 18px 0 4px; }
+
+.sf-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sf-item {
+  display: flex;
+  gap: 12px;
+  padding: 11px var(--text-pad);
+  border-bottom: 1px solid #d3d7de;
+}
+
+.sf-list .sf-item:last-child { border-bottom: 0; }
+
+/* 동그란 번호 (회색 막대와 같은 색) */
+.sf-no {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #bcc2cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.sf-body { flex: 1; min-width: 0; padding-top: 1px; }
+
+.sf-text,
+.sf-title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.sf-text b,
+.sf-title { font-weight: 700; }
+
+.sf-desc {
+  margin: 3px 0 0;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.3px;
+  color: var(--sub);
+  word-break: keep-all;
+}
+
+.sf-table {
+  width: calc(100% - var(--text-pad) * 2);
+  margin: 4px var(--text-pad) 6px;
+}
+
+.sf-foot {
+  margin: 10px var(--text-pad) 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--sub);
+}
+
+#view-safety .ds-bullets { margin-top: 4px; }
+
+@media (min-width: 700px) {
+  #view-schedule, #view-safety { --text-pad: 26px; }
+  .tl-time { width: 52px; font-size: 17px; }
+  .tl-text, .sf-text, .sf-title { font-size: 17px; }
+  .tl-place { font-size: 14.5px; }
+  .tl-note, .sf-desc { font-size: 14.5px; }
 }
 
 /* ── 호텔 정보 ──
