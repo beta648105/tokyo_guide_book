@@ -196,6 +196,185 @@ function renderJapanese() {
   section.replaceChildren(...parts);
 }
 
+/* ── 호텔 정보 (메뉴) ──
+   내용 출처: text/hotel.txt, 사진: images/hotel/ */
+
+const HOTEL = {
+  tagline: "도쿄 여행의 출발점, 시나가와 프린스 호텔",
+  intro: [
+    "시나가와 프린스 호텔(品川プリンスホテル)은 시나가와역 다카나와 출구에서 도보 약 2분 거리에 있는 대형 호텔이다.",
+    "JR과 게이큐선, 도카이도 신칸센을 이용할 수 있는 역과 가까워 도쿄 시내 관광과 다른 도시로의 이동을 계획하기 편리하다.",
+    "숙박 시설뿐 아니라 레스토랑, 수족관, 영화관, 볼링장까지 모여 있어 식사와 여가를 한곳에서 즐길 수 있다.",
+    "메인 타워·아넥스 타워·N 타워·이스트 타워로 나뉘므로, 도착하기 전에 예약한 타워 이름을 확인해 두는 것이 좋다.",
+  ],
+  notes: [
+    "(1) 주소: 일본 도쿄도 미나토구 다카나와 4-10-30 (〒108-8611)",
+    "(2) 교통: JR·게이큐선·도카이도 신칸센 시나가와역 다카나와 출구에서 도보 약 2분",
+    "(3) 체크인 / 체크아웃: 일반적으로 15:00부터 / 11:00까지. 예약한 숙박 상품에 별도 시간이 있으면 해당 조건을 따른다.",
+    "(4) 문의 전화: +81-3-3440-1111",
+    "(5) 공식 홈페이지: https://www.princehotels.com/ko/shinagawa/",
+    "(6) 지도: https://www.google.com/maps/search/?api=1&query=Shinagawa+Prince+Hotel+4-10-30+Takanawa",
+    "(7) 숙박 요금: 날짜·타워·객실 종류·식사 포함 여부에 따라 달라지므로 예약 화면에서 확인한다.",
+  ],
+  spots: [
+    {
+      image: "images/hotel/hotel_exterior.jpg",
+      title: "시나가와 프린스 호텔",
+      blocks: [
+        { type: "lead", text: "시나가와역 앞에 펼쳐진 숙박과 엔터테인먼트 공간" },
+        { type: "para", text: "호텔은 여러 타워와 부대시설이 모인 형태로, 여행 중 쉬어 가는 숙소이자 다양한 실내 활동을 즐기는 장소이다." },
+        { type: "para", text: "역에서 호텔까지는 다카나와 출구 쪽으로 나와 이동한다. 같은 지역의 다른 프린스 계열 호텔과 혼동하지 않도록 호텔 이름과 주소를 함께 확인한다." },
+        { type: "label", text: "주요 즐길 거리" },
+        {
+          type: "bullets",
+          items: [
+            "맥셀 아쿠아파크 시나가와: 호텔 부지 안의 수족관으로, 해양생물 전시와 공연을 즐길 수 있다.",
+            "T・조이 프린스 시나가와: 호텔 단지 안의 영화관으로, 상영작과 시간은 영화관 홈페이지에서 확인한다.",
+            "시나가와 프린스 호텔 볼링센터: 날씨에 관계없이 실내에서 즐길 수 있는 여가 시설이다.",
+            "이용 안내: 각 시설의 입장료와 이용료는 숙박료에 자동으로 포함되는 것이 아니므로 예약 상품의 포함 내역을 확인한다. 운영 시간과 휴무는 시설별로 다르다.",
+          ],
+        },
+      ],
+    },
+    {
+      image: "images/hotel/hotel_main_lobby.jpg",
+      title: "메인 타워와 숙박 안내",
+      blocks: [
+        { type: "lead", text: "체크인부터 식사까지, 호텔 이용의 중심이 되는 메인 타워" },
+        { type: "para", text: "메인 타워 프런트는 1층에 있다. 트윈룸과 코너 트윈룸 등 여러 객실 유형이 있으며, 높은 층에서는 객실 방향에 따라 도쿄의 도시 풍경을 감상할 수 있다." },
+        { type: "note", text: "사진은 메인 타워 로비이며, 객실 내부 사진은 아니다." },
+        { type: "label", text: "숙박 시 알아둘 점" },
+        {
+          type: "bullets",
+          items: [
+            "객실: 메인 타워 일반 트윈룸은 약 21㎡, 코너 트윈룸은 약 26.5㎡이다. 층과 객실 유형에 따라 구성과 침대 조건이 다르다.",
+            "전망: 도쿄 타워가 보이는 방이나 높은 층은 요청할 수 있지만, 객실 상황에 따라 배정이 보장되지는 않는다.",
+            "인터넷: 객실에서 무료 Wi-Fi를 사용할 수 있다.",
+            "짐 보관: 체크인 전·체크아웃 후에는 메인 타워 1층 짐 보관 카운터를 이용할 수 있다. 귀중품·깨지기 쉬운 물건·신선식품은 보관 대상에서 제외된다.",
+          ],
+        },
+        { type: "label", text: "주요 식사 공간" },
+        {
+          type: "bullets",
+          items: [
+            "LUXE DINING HAPUNA: 메인 타워 1층의 뷔페 레스토랑이다. 조식 운영 시간은 공식 안내 기준 06:00~10:00이며, 조식 포함 여부는 예약 내역에서 확인한다.",
+            "DINING & BAR TABLE 9 TOKYO: 메인 타워 39층, 지상 약 130m 높이에 있는 다이닝·바이다. 도쿄의 전망과 함께 식사할 수 있다.",
+            "TABLE 9 이용 안내: 스마트 캐주얼 복장이 요구되며, 바 구역은 어린이가 이용할 수 없다. 저녁에는 연령과 보호자 동반 여부에 따른 입장 제한이 있으므로 방문 전 확인한다.",
+            "식사 요금과 운영 시간은 날짜·메뉴에 따라 달라질 수 있다. 알레르기가 있다면 식당에 미리 문의한다.",
+          ],
+        },
+      ],
+    },
+    {
+      image: "images/hotel/hotel_annex_lobby.jpg",
+      title: "타워별 위치와 이동 안내",
+      blocks: [
+        { type: "lead", text: "같은 호텔 안에서도 다른 체크인 장소" },
+        { type: "para", text: "각 타워는 프런트 위치와 객실 구성이 다르다. 역에서 가까운 호텔이라도 예약한 타워를 확인하지 않으면 다른 프런트로 이동할 수 있으므로, 예약 확인서의 타워 이름을 먼저 살펴본다." },
+        { type: "note", text: "사진은 아넥스 타워 로비이다." },
+        { type: "label", text: "타워별 프런트" },
+        {
+          type: "table",
+          rows: [
+            ["메인 타워", "1층"],
+            ["아넥스 타워", "7층"],
+            ["N 타워", "2층"],
+            ["이스트 타워", "1층"],
+          ],
+        },
+        { type: "label", text: "이용 팁" },
+        {
+          type: "bullets",
+          items: [
+            "일행이 서로 다른 타워에 숙박한다면 타워 이름과 객실 예약자 이름을 함께 공유한다.",
+            "N 타워와 이스트 타워는 저층 건물이므로, 모든 타워에서 높은 층의 전망을 기대할 수 있는 것은 아니다.",
+            "조식 장소·식사권·체크아웃 시간은 예약 상품에 따라 달라질 수 있으므로 체크인할 때 확인한다.",
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+/** 호텔 정보를 그린다. 소개글 → 방문 안내 → 사진+제목+화살표로 펼치는 항목 */
+function renderHotel() {
+  const section = document.getElementById("view-hotel");
+  if (!section) return;
+
+  const parts = [];
+
+  const tag = document.createElement("p");
+  tag.className = "spot-tagline";
+  tag.textContent = `‘${HOTEL.tagline}’`;
+  parts.push(tag);
+
+  const intro = document.createElement("div");
+  intro.className = "spot-intro";
+  for (const text of HOTEL.intro) {
+    const p = document.createElement("p");
+    p.textContent = text;
+    intro.append(p);
+  }
+  parts.push(intro);
+
+  const info = document.createElement("section");
+  info.className = "wb-section";
+  const head = document.createElement("div");
+  head.className = "sec-head";
+  const bar = document.createElement("span");
+  bar.className = "sec-bar";
+  const title = document.createElement("h2");
+  title.className = "sec-title";
+  title.textContent = "방문 안내";
+  head.append(bar, title);
+  info.append(head, buildBlock({ type: "notes", items: HOTEL.notes }));
+  parts.push(info);
+
+  for (const spot of HOTEL.spots) {
+    const wrap = document.createElement("section");
+    wrap.className = "spot hotel-spot";
+
+    // 사진은 가로로 꽉 채워 위에, 제목과 화살표 마크는 그 아래에
+    const img = document.createElement("img");
+    img.src = spot.image;
+    img.alt = spot.title;
+    img.loading = "lazy";
+    img.decoding = "async";
+
+    img.className = "hotel-img";
+
+    const side = document.createElement("div");
+    side.className = "hotel-head";
+    const name = document.createElement("h2");
+    name.className = "ds-name hotel-name";
+    name.textContent = spot.title;
+    const toggle = buildToggle();
+    side.append(name, toggle);
+
+    const body = document.createElement("div");
+    body.className = "spot-body";
+    const inner = document.createElement("div");
+    inner.className = "hotel-body-inner";
+    for (const block of spot.blocks) inner.append(buildBlock(block));
+    body.append(inner);
+
+    wrap.append(img, side, body);
+    toggle.addEventListener("click", () => {
+      const open = wrap.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "접기" : "자세히 보기");
+    });
+    parts.push(wrap);
+  }
+
+  // 메뉴 화면은 처음에 숨겨져 있으므로 스크롤 등장 효과는 쓰지 않는다
+  for (const part of parts) {
+    part.classList.remove("reveal");
+    for (const el of part.querySelectorAll(".reveal")) el.classList.remove("reveal");
+  }
+  section.replaceChildren(...parts);
+}
+
 /** 일정표를 그린다. */
 function renderTimeline() {
   const section = document.getElementById("view-schedule");
@@ -637,6 +816,18 @@ function buildBlock(block) {
       return table;
     }
 
+    // '• 이름: 설명' 점 목록 (머리말은 굵게)
+    case "bullets": {
+      const ul = document.createElement("ul");
+      ul.className = "ds-bullets reveal";
+      for (const text of block.items) {
+        const li = document.createElement("li");
+        fillLabeled(li, text);
+        ul.append(li);
+      }
+      return ul;
+    }
+
     case "label": {
       const p = document.createElement("p");
       p.className = "ds-sublabel reveal";
@@ -894,6 +1085,7 @@ function initFloatingNav() {
 const MENU_ITEMS = [
   { label: "일정표", view: "schedule" },
   { label: "일본어 회화", view: "japanese" },
+  { label: "호텔 정보", view: "hotel" },
   { label: "홈 화면 추가", view: "install" },
 ];
 
@@ -901,7 +1093,7 @@ const MENU_ITEMS = [
    어느 페이지에서든 상단 사진은 그대로 두고 그 아래만 바꾼다.
    시부야에서 열면 시부야 사진이, 홈에서 열면 도쿄 사진이 그대로 남는다. */
 
-const VIEWS = ["main", "schedule", "japanese", "install"];
+const VIEWS = ["main", "schedule", "japanese", "hotel", "install"];
 
 /** 메뉴로 연 화면에서 사진 아래에 표시할 제목 */
 const VIEW_TITLES = Object.fromEntries(

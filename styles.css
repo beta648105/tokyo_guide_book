@@ -515,6 +515,64 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   }
 }
 
+/* ── 호텔 정보 ──
+   지역 페이지처럼 좌우 여백은 각 글 블록이 직접 갖는다 */
+#view-hotel {
+  --text-pad: 18px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#view-hotel .wb-section { margin-bottom: 30px; }
+
+/* 가로로 꽉 차는 사진, 위아래는 배경으로 옅게 녹아든다 */
+.hotel-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 11%, #000 89%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 11%, #000 89%, transparent 100%);
+}
+
+/* 사진 아래: 회색 막대 + 제목, 오른쪽 끝에 화살표 마크 */
+.hotel-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 0 var(--text-pad);
+}
+
+.hotel-name {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.hotel-name::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  background: #bcc2cc;
+}
+
+.hotel-spot.open .spot-toggle { transform: rotate(90deg); }
+.hotel-spot.open .spot-toggle:active { transform: rotate(90deg) scale(0.92); }
+
+/* 펼친 내용 (좌우 여백은 블록이 갖는다) */
+.hotel-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.hotel-spot.open .hotel-body-inner { padding: 14px 0 4px; }
+
+.hotel-body-inner .floors {
+  width: calc(100% - var(--text-pad) * 2);
+  margin: 4px var(--text-pad) 14px;
+}
+
 /* ── 일본어 회화 ──
    쓰임새별로 묶고, 한 줄에 일본어 · 발음 · 뜻을 같이 보여준다 */
 #view-japanese {

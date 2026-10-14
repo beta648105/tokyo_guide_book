@@ -54,6 +54,7 @@ function renderGrid() {
 renderGrid();
 renderTimeline();
 renderJapanese();
+renderHotel();
 renderGuide();
 initViews();
 registerServiceWorker();

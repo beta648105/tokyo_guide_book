@@ -5,6 +5,7 @@
 
 renderTimeline();
 renderJapanese();
+renderHotel();
 renderGuide();
 initViews();
 registerServiceWorker();
