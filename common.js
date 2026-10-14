@@ -814,6 +814,26 @@ function renderSafety() {
       foot.textContent = block.foot;
       wrap.append(foot);
     }
+
+    // 일본어 회화처럼 항목별로 접어 두고, 제목줄(화살표 마크)을 누르면 펼친다
+    const [head, ...content] = wrap.children;
+    wrap.classList.add("jp-section");
+    head.classList.add("jp-head");
+    const toggle = buildToggle();
+    head.append(toggle);
+    const body = document.createElement("div");
+    body.className = "jp-body";
+    const inner = document.createElement("div");
+    inner.className = "jp-body-inner";
+    inner.append(...content);
+    body.append(inner);
+    wrap.append(body);
+    head.addEventListener("click", () => {
+      const open = wrap.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "접기" : "자세히 보기");
+    });
+
     parts.push(wrap);
   }
   section.replaceChildren(...parts);
