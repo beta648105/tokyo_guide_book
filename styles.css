@@ -534,7 +534,7 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   mask-image: linear-gradient(to bottom, transparent 0%, #000 11%, #000 89%, transparent 100%);
 }
 
-/* 사진 아래: 회색 막대 + 제목, 오른쪽 끝에 화살표 마크 */
+/* 사진 아래: 회색 막대 + 제목 */
 .hotel-head {
   display: flex;
   align-items: center;
@@ -557,18 +557,11 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   background: #bcc2cc;
 }
 
-.hotel-spot.open .spot-toggle { transform: rotate(90deg); }
-.hotel-spot.open .spot-toggle:active { transform: rotate(90deg) scale(0.92); }
 
-/* 펼친 내용 (좌우 여백은 블록이 갖는다) */
-.hotel-body-inner {
-  overflow: hidden;
-  min-height: 0;
-}
+/* 제목 아래 내용 (좌우 여백은 블록이 갖는다) */
+.hotel-body { padding: 14px 0 4px; }
 
-.hotel-spot.open .hotel-body-inner { padding: 14px 0 4px; }
-
-.hotel-body-inner .floors {
+.hotel-body .floors {
   width: calc(100% - var(--text-pad) * 2);
   margin: 4px var(--text-pad) 14px;
 }

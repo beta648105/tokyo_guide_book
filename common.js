@@ -296,7 +296,7 @@ const HOTEL = {
   ],
 };
 
-/** 호텔 정보를 그린다. 소개글 → 방문 안내 → 사진+제목+화살표로 펼치는 항목 */
+/** 호텔 정보를 그린다. 소개글 → 방문 안내 → 사진(위)+제목+내용 */
 function renderHotel() {
   const section = document.getElementById("view-hotel");
   if (!section) return;
@@ -340,7 +340,6 @@ function renderHotel() {
     img.alt = spot.title;
     img.loading = "lazy";
     img.decoding = "async";
-
     img.className = "hotel-img";
 
     const side = document.createElement("div");
@@ -348,22 +347,14 @@ function renderHotel() {
     const name = document.createElement("h2");
     name.className = "ds-name hotel-name";
     name.textContent = spot.title;
-    const toggle = buildToggle();
-    side.append(name, toggle);
+    side.append(name);
 
+    // 접지 않고 내용을 바로 보여준다
     const body = document.createElement("div");
-    body.className = "spot-body";
-    const inner = document.createElement("div");
-    inner.className = "hotel-body-inner";
-    for (const block of spot.blocks) inner.append(buildBlock(block));
-    body.append(inner);
+    body.className = "hotel-body";
+    for (const block of spot.blocks) body.append(buildBlock(block));
 
     wrap.append(img, side, body);
-    toggle.addEventListener("click", () => {
-      const open = wrap.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", String(open));
-      toggle.setAttribute("aria-label", open ? "접기" : "자세히 보기");
-    });
     parts.push(wrap);
   }
 
