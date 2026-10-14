@@ -371,13 +371,17 @@ function renderTimeline() {
   const section = document.getElementById("view-schedule");
   if (!section) return;
 
-  const img = document.createElement("img");
-  img.className = "timeline-img";
-  img.src = "images/timeline/timeline.jpg";
-  img.alt = "여행 일정표";
-  img.loading = "lazy";
-  img.decoding = "async";
-  section.replaceChildren(img);
+  // 1~4번 일정표를 가로로 꽉 채워 위에서 아래로 차례대로
+  const images = [1, 2, 3, 4].map((n) => {
+    const img = document.createElement("img");
+    img.className = "timeline-img zoomable";   // 글씨가 작아서 누르면 크게 볼 수 있게
+    img.src = `images/timeline/timeline_${n}.jpg`;
+    img.alt = `여행 일정표 ${n}`;
+    img.loading = "lazy";
+    img.decoding = "async";
+    return img;
+  });
+  section.replaceChildren(...images);
 }
 
 /** 홈 화면 추가 안내를 그린다. 세 페이지가 같은 내용을 쓴다. */

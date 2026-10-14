@@ -507,7 +507,7 @@ body:not([data-view="main"]) .back-btn { display: flex; }
   height: auto;
 }
 
-/* 넓은 화면에서는 원본(618px)보다 너무 키우면 흐려지므로 제한 */
+/* 넓은 화면에서는 너무 커지지 않게 제한 */
 @media (min-width: 1000px) {
   .timeline-img {
     max-width: 1000px;
