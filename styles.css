@@ -524,8 +524,38 @@ body:not([data-view="main"]) .back-btn { display: flex; }
 }
 
 .jp-section {
-  margin: 0 0 30px;
+  margin: 0 0 18px;
 }
+
+/* 제목줄 오른쪽 끝에 화살표 마크. 제목줄 어디를 눌러도 펼쳐진다 */
+.jp-head {
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0;
+}
+
+.jp-head .spot-toggle { margin-left: auto; }
+
+.jp-section.open .spot-toggle { transform: rotate(90deg); }
+.jp-section.open .spot-toggle:active { transform: rotate(90deg) scale(0.92); }
+
+/* 접었다 펴지는 영역 (grid 행 높이로 부드럽게) */
+.jp-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.34s var(--ease-out);
+}
+
+.jp-section.open .jp-body {
+  grid-template-rows: 1fr;
+}
+
+.jp-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.jp-section.open .jp-body-inner { padding-top: 6px; }
 
 .jp-list {
   margin: 0;

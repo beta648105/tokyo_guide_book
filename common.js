@@ -147,8 +147,17 @@ function renderJapanese() {
     const title = document.createElement("h2");
     title.className = "sec-title";
     title.textContent = group.title;
-    head.append(bar, title);
+    // 상황별로 접어 두고, 화살표 마크(또는 제목줄)를 누르면 펼친다
+    head.classList.add("jp-head");
+    const toggle = buildToggle();
+    head.append(bar, title, toggle);
     sec.append(head);
+
+    head.addEventListener("click", () => {
+      const open = sec.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "접기" : "자세히 보기");
+    });
 
     const list = document.createElement("ul");
     list.className = "jp-list";
@@ -174,7 +183,13 @@ function renderJapanese() {
       list.append(item);
     }
 
-    sec.append(list);
+    const body = document.createElement("div");
+    body.className = "jp-body";
+    const inner = document.createElement("div");
+    inner.className = "jp-body-inner";
+    inner.append(list);
+    body.append(inner);
+    sec.append(body);
     parts.push(sec);
   }
 
